@@ -3,6 +3,7 @@ __pycache__/
 *.jsonl
 *.tsv
 *.db
+*.ipynb
 
 # experiment outputs
 output_agentic/
