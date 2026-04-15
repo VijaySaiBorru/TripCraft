@@ -1,0 +1,1028 @@
+>>> explain_batch(1,324)
+
+============================================================
+🔎 PLAN idx = 3 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 4 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 5 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 6 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+❌ valid_attraction_type → The attraction type shopping is not satisfied.
+
+============================================================
+🔎 PLAN idx = 10 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+
+============================================================
+🔎 PLAN idx = 11 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+
+============================================================
+🔎 PLAN idx = 12 FAILURES:
+❌ is_valid_information_in_sandbox → The breakfast in day 4 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 14 FAILURES:
+❌ is_valid_information_in_sandbox → The accommodation in day 3 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 15 FAILURES:
+❌ is_valid_information_in_sandbox → The accommodation in day 3 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 17 FAILURES:
+❌ is_valid_poi_sequence → PoI list for day 4 must start and end with accommodation.
+
+============================================================
+🔎 PLAN idx = 18 FAILURES:
+❌ is_not_absent → No attraction in day 4 is not allowed.
+
+============================================================
+🔎 PLAN idx = 19 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 20 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+❌ valid_attraction_type → The attraction type shopping is not satisfied.
+
+============================================================
+🔎 PLAN idx = 21 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+❌ valid_cuisine → The cuisine italian is not satisfied.
+❌ valid_attraction_type → The attraction type museums is not satisfied.
+
+============================================================
+🔎 PLAN idx = 24 FAILURES:
+❌ valid_attraction_type → The attraction type shopping is not satisfied.
+
+============================================================
+🔎 PLAN idx = 25 FAILURES:
+❌ is_valid_meal_gaps → Dinner is missing from PoI list on day 4.
+❌ is_valid_poi_sequence → PoI list for day 4 does not contain dinner.
+❌ valid_attraction_type → The attraction type museums is not satisfied.
+
+============================================================
+🔎 PLAN idx = 27 FAILURES:
+❌ valid_cuisine → The cuisine chinese is not satisfied.
+
+============================================================
+🔎 PLAN idx = 28 FAILURES:
+❌ is_valid_poi_sequence → PoI list for day 4 must start and end with accommodation.
+
+============================================================
+🔎 PLAN idx = 30 FAILURES:
+❌ valid_attraction_type → The attraction type fun & games is not satisfied.
+
+============================================================
+🔎 PLAN idx = 32 FAILURES:
+❌ valid_cuisine → The cuisine italian is not satisfied.
+
+============================================================
+🔎 PLAN idx = 37 FAILURES:
+❌ valid_room_rule → The house rule should be pets.
+
+============================================================
+🔎 PLAN idx = 38 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+❌ is_valid_information_in_sandbox → The PoI nearest stops in day 3 have hallucinated data.
+
+============================================================
+🔎 PLAN idx = 39 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+❌ valid_attraction_type → The attraction type sights & landmarks is not satisfied.
+
+============================================================
+🔎 PLAN idx = 42 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 43 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 46 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+
+============================================================
+🔎 PLAN idx = 47 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 48 FAILURES:
+❌ is_valid_poi_sequence → PoI list for day 4 must start and end with accommodation.
+
+============================================================
+🔎 PLAN idx = 49 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 50 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+❌ is_valid_information_in_sandbox → The accommodation in day 3 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 51 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 52 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 55 FAILURES:
+❌ valid_attraction_type → The attraction type concerts & shows is not satisfied.
+
+============================================================
+🔎 PLAN idx = 56 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+❌ valid_attraction_type → The attraction type outdoor activities is not satisfied.
+
+============================================================
+🔎 PLAN idx = 57 FAILURES:
+❌ valid_room_rule → The house rule should be smoking.
+
+============================================================
+🔎 PLAN idx = 59 FAILURES:
+❌ valid_room_rule → The house rule should be smoking.
+
+============================================================
+🔎 PLAN idx = 61 FAILURES:
+❌ is_valid_information_in_sandbox → The attraction Cedar River, Cedar Rapids in day 2 is invalid in the sandbox.
+❌ is_not_absent → No attraction in day 4 is not allowed.
+
+============================================================
+🔎 PLAN idx = 62 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+❌ valid_room_rule → The house rule should be parties.
+❌ valid_attraction_type → The attraction type fun & games is not satisfied.
+
+============================================================
+🔎 PLAN idx = 64 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+❌ valid_transportation → The transportation should not be self-driving or taxi.
+
+============================================================
+🔎 PLAN idx = 65 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+
+============================================================
+🔎 PLAN idx = 66 FAILURES:
+❌ is_valid_information_in_sandbox → The accommodation in day 3 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 67 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+
+============================================================
+🔎 PLAN idx = 69 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 70 FAILURES:
+❌ is_valid_poi_sequence → PoI list for day 4 must start and end with accommodation.
+
+============================================================
+🔎 PLAN idx = 71 FAILURES:
+❌ is_valid_poi_sequence → PoI list for day 4 must start and end with accommodation.
+
+============================================================
+🔎 PLAN idx = 72 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+❌ valid_attraction_type → The attraction type fun & games is not satisfied.
+
+============================================================
+🔎 PLAN idx = 73 FAILURES:
+❌ valid_attraction_type → The attraction type fun & games is not satisfied.
+
+============================================================
+🔎 PLAN idx = 78 FAILURES:
+❌ valid_room_rule → The house rule should be children under 10.
+
+============================================================
+🔎 PLAN idx = 79 FAILURES:
+❌ valid_room_rule → The house rule should be parties.
+
+============================================================
+🔎 PLAN idx = 81 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 82 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 84 FAILURES:
+❌ is_valid_information_in_sandbox → The accommodation in day 3 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 86 FAILURES:
+❌ is_not_absent → No attraction in day 4 is not allowed.
+
+============================================================
+🔎 PLAN idx = 88 FAILURES:
+❌ is_valid_poi_sequence → PoI list for day 4 must start and end with accommodation.
+
+============================================================
+🔎 PLAN idx = 89 FAILURES:
+❌ is_valid_meal_gaps → Dinner is missing from PoI list on day 2.
+❌ is_valid_poi_sequence → PoI list for day 2 does not contain dinner.
+❌ valid_room_rule → The house rule should be parties.
+
+============================================================
+🔎 PLAN idx = 91 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+❌ is_valid_information_in_sandbox → The accommodation in day 3 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 93 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 94 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+❌ valid_cuisine → The cuisine chinese is not satisfied.
+
+============================================================
+🔎 PLAN idx = 95 FAILURES:
+❌ valid_room_rule → The house rule should be smoking.
+
+============================================================
+🔎 PLAN idx = 96 FAILURES:
+❌ valid_room_rule → The house rule should be smoking.
+❌ valid_event_type → The event type sports is not satisfied.
+
+============================================================
+🔎 PLAN idx = 97 FAILURES:
+❌ valid_room_rule → The house rule should be smoking.
+❌ valid_event_type → The event type sports is not satisfied.
+
+============================================================
+🔎 PLAN idx = 99 FAILURES:
+❌ is_valid_meal_gaps → Dinner is missing from PoI list on day 4.
+❌ is_valid_poi_sequence → PoI list for day 4 does not contain dinner.
+
+============================================================
+🔎 PLAN idx = 100 FAILURES:
+❌ is_valid_information_in_sandbox → The attraction Sutter’s Fort State Historic Park, Sacramento in day 4 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 103 FAILURES:
+❌ is_valid_meal_gaps → Dinner is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → Day 3 PoI list must start with previous accommodation and end with current accommodation.
+❌ valid_cuisine → The cuisine chinese is not satisfied.
+
+============================================================
+🔎 PLAN idx = 106 FAILURES:
+❌ is_valid_poi_sequence → Final day PoI list must start with previous accommodation (checkout).
+
+============================================================
+🔎 PLAN idx = 107 FAILURES:
+❌ is_valid_meal_gaps → Dinner is missing from PoI list on day 2.
+❌ is_valid_poi_sequence → PoI list for day 2 does not contain dinner.
+
+============================================================
+🔎 PLAN idx = 108 FAILURES:
+❌ valid_room_rule → The house rule should be smoking.
+
+============================================================
+🔎 PLAN idx = 109 FAILURES:
+❌ valid_attraction_type → The attraction type fun & games is not satisfied.
+
+============================================================
+🔎 PLAN idx = 111 FAILURES:
+❌ valid_attraction_type → The attraction type museums is not satisfied.
+
+============================================================
+🔎 PLAN idx = 112 FAILURES:
+❌ is_valid_poi_sequence → Final day PoI list must start with previous accommodation (checkout).
+❌ valid_attraction_type → The attraction type museums is not satisfied.
+
+============================================================
+🔎 PLAN idx = 113 FAILURES:
+❌ is_valid_poi_sequence → Final day PoI list must start with previous accommodation (checkout).
+❌ valid_attraction_type → The attraction type concerts & shows is not satisfied.
+
+============================================================
+🔎 PLAN idx = 116 FAILURES:
+❌ valid_cuisine → The cuisine chinese is not satisfied.
+
+============================================================
+🔎 PLAN idx = 117 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between lunch and dinner on day 2.
+❌ is_valid_information_in_sandbox → The PoI nearest stops in day 3 have hallucinated data.
+
+============================================================
+🔎 PLAN idx = 120 FAILURES:
+❌ is_valid_information_in_sandbox → The attraction Cedar River, Cedar Rapids in day 4 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 121 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 123 FAILURES:
+❌ is_valid_information_in_sandbox → The lunch in day 3 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 126 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+❌ is_valid_information_in_sandbox → The PoI nearest stops in day 3 have hallucinated data.
+
+============================================================
+🔎 PLAN idx = 131 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 132 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 4.
+
+============================================================
+🔎 PLAN idx = 133 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+
+============================================================
+🔎 PLAN idx = 138 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain dinner.
+
+============================================================
+🔎 PLAN idx = 139 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+❌ valid_room_rule → The house rule should be parties.
+
+============================================================
+🔎 PLAN idx = 140 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 143 FAILURES:
+❌ is_valid_information_in_sandbox → The accommodation in day 1 is invalid in the sandbox.
+❌ is_not_absent → No attraction in day 4 is not allowed.
+
+============================================================
+🔎 PLAN idx = 144 FAILURES:
+❌ valid_room_rule → The house rule should be smoking.
+❌ valid_transportation → The transportation should not be self-driving or taxi.
+
+============================================================
+🔎 PLAN idx = 145 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+❌ valid_cuisine → The cuisine indian is not satisfied.
+❌ valid_transportation → The transportation should not be self-driving or taxi.
+
+============================================================
+🔎 PLAN idx = 147 FAILURES:
+❌ is_valid_meal_gaps → Breakfast is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain breakfast.
+
+============================================================
+🔎 PLAN idx = 148 FAILURES:
+❌ is_not_absent → No attraction in day 4 is not allowed.
+
+============================================================
+🔎 PLAN idx = 149 FAILURES:
+❌ is_valid_meal_gaps → Dinner is missing from PoI list on day 2.
+❌ is_valid_poi_sequence → PoI list for day 2 does not contain dinner.
+
+============================================================
+🔎 PLAN idx = 150 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 151 FAILURES:
+❌ is_valid_meal_gaps → Dinner is missing from PoI list on day 2.
+❌ is_valid_poi_sequence → PoI list for day 2 does not contain dinner.
+
+============================================================
+🔎 PLAN idx = 153 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+❌ is_valid_information_in_sandbox → The attraction Chippewa River Trail, Eau Claire in day 2 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 154 FAILURES:
+❌ is_valid_meal_gaps → Dinner is missing from PoI list on day 2.
+❌ is_valid_poi_sequence → PoI list for day 2 does not contain dinner.
+
+============================================================
+🔎 PLAN idx = 155 FAILURES:
+❌ is_valid_information_in_sandbox → The dinner in day 3 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 156 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+
+============================================================
+🔎 PLAN idx = 157 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain breakfast.
+
+============================================================
+🔎 PLAN idx = 158 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+
+============================================================
+🔎 PLAN idx = 161 FAILURES:
+❌ valid_room_rule → The house rule should be smoking.
+
+============================================================
+🔎 PLAN idx = 163 FAILURES:
+❌ valid_cuisine → The cuisine italian is not satisfied.
+
+============================================================
+🔎 PLAN idx = 164 FAILURES:
+❌ valid_cuisine → The cuisine italian is not satisfied.
+
+============================================================
+🔎 PLAN idx = 165 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+❌ is_not_absent → No attraction in day 2 is not allowed.
+
+============================================================
+🔎 PLAN idx = 166 FAILURES:
+❌ valid_cuisine → The cuisine italian is not satisfied.
+
+============================================================
+🔎 PLAN idx = 167 FAILURES:
+❌ valid_cuisine → The cuisine italian is not satisfied.
+
+============================================================
+🔎 PLAN idx = 169 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 170 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 171 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 172 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 5.
+❌ is_valid_poi_sequence → PoI list for day 5 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 173 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 4.
+❌ is_valid_poi_sequence → PoI list for day 5 does not contain lunch.
+❌ is_not_absent → No attraction in day 4 is not allowed.
+
+============================================================
+🔎 PLAN idx = 175 FAILURES:
+❌ is_valid_meal_gaps → Dinner is missing from PoI list on day 5.
+❌ is_valid_poi_sequence → PoI list for day 5 does not contain dinner.
+
+============================================================
+🔎 PLAN idx = 176 FAILURES:
+❌ is_valid_information_in_sandbox → The PoI nearest stops in day 3 have hallucinated data.
+
+============================================================
+🔎 PLAN idx = 177 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+
+============================================================
+🔎 PLAN idx = 179 FAILURES:
+❌ valid_room_rule → The house rule should be pets.
+
+============================================================
+🔎 PLAN idx = 180 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 182 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+❌ valid_cuisine → The cuisine chinese is not satisfied.
+
+============================================================
+🔎 PLAN idx = 183 FAILURES:
+❌ valid_event_type → The event type arts & theatre is not satisfied.
+
+============================================================
+🔎 PLAN idx = 184 FAILURES:
+❌ is_valid_meal_gaps → Dinner is missing from PoI list on day 2.
+❌ is_valid_poi_sequence → PoI list for day 2 does not contain dinner.
+
+============================================================
+🔎 PLAN idx = 185 FAILURES:
+❌ is_not_absent → No attraction in day 2 is not allowed.
+
+============================================================
+🔎 PLAN idx = 186 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 187 FAILURES:
+❌ is_valid_meal_gaps → Dinner is missing from PoI list on day 2.
+❌ is_valid_poi_sequence → PoI list for day 2 does not contain dinner.
+
+============================================================
+🔎 PLAN idx = 190 FAILURES:
+❌ is_valid_information_in_sandbox → The attraction Chippewa River Trail, Eau Claire in day 2 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 191 FAILURES:
+❌ is_valid_meal_gaps → Dinner is missing from PoI list on day 2.
+❌ is_valid_poi_sequence → PoI list for day 2 does not contain dinner.
+
+============================================================
+🔎 PLAN idx = 192 FAILURES:
+❌ is_valid_information_in_sandbox → The dinner in day 3 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 194 FAILURES:
+❌ is_valid_meal_gaps → Dinner is missing from PoI list on day 2.
+❌ is_valid_poi_sequence → PoI list for day 2 does not contain dinner.
+
+============================================================
+🔎 PLAN idx = 195 FAILURES:
+❌ valid_room_rule → The house rule should be smoking.
+
+============================================================
+🔎 PLAN idx = 198 FAILURES:
+❌ is_valid_poi_sequence → Final day PoI list must start with previous accommodation (checkout).
+
+============================================================
+🔎 PLAN idx = 200 FAILURES:
+❌ valid_room_rule → The house rule should be smoking.
+
+============================================================
+🔎 PLAN idx = 201 FAILURES:
+❌ valid_room_rule → The house rule should be smoking.
+
+============================================================
+🔎 PLAN idx = 202 FAILURES:
+❌ is_valid_information_in_sandbox → The accommodation in day 3 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 203 FAILURES:
+❌ is_not_absent → No attraction in day 4 is not allowed.
+
+============================================================
+🔎 PLAN idx = 205 FAILURES:
+❌ is_valid_information_in_sandbox → The attraction Sutter’s Fort State Historic Park, Sacramento in day 4 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 207 FAILURES:
+❌ is_valid_poi_sequence → Final day PoI list must start with previous accommodation (checkout).
+❌ valid_cuisine → The cuisine latin is not satisfied.
+
+============================================================
+🔎 PLAN idx = 208 FAILURES:
+❌ is_valid_poi_sequence → Final day PoI list must start with previous accommodation (checkout).
+
+============================================================
+🔎 PLAN idx = 209 FAILURES:
+❌ is_valid_poi_sequence → Final day PoI list must start with previous accommodation (checkout).
+❌ valid_room_rule → The house rule should be smoking.
+
+============================================================
+🔎 PLAN idx = 210 FAILURES:
+❌ is_valid_poi_sequence → Final day PoI list must start with previous accommodation (checkout).
+
+============================================================
+🔎 PLAN idx = 212 FAILURES:
+❌ is_valid_poi_sequence → Final day PoI list must start with previous accommodation (checkout).
+❌ valid_attraction_type → The attraction type museums is not satisfied.
+
+============================================================
+🔎 PLAN idx = 213 FAILURES:
+❌ is_valid_poi_sequence → Final day PoI list must start with previous accommodation (checkout).
+❌ valid_attraction_type → The attraction type concerts & shows is not satisfied.
+
+============================================================
+🔎 PLAN idx = 214 FAILURES:
+❌ valid_room_rule → The house rule should be smoking.
+
+============================================================
+🔎 PLAN idx = 215 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+
+============================================================
+🔎 PLAN idx = 217 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+
+============================================================
+🔎 PLAN idx = 218 FAILURES:
+❌ is_valid_information_in_sandbox → The accommodation in day 3 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 221 FAILURES:
+❌ is_valid_information_in_sandbox → The attraction Cedar River, Cedar Rapids in day 4 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 222 FAILURES:
+❌ is_valid_poi_sequence → Final day PoI list must start with previous accommodation (checkout).
+❌ valid_room_rule → The house rule should be smoking.
+❌ valid_attraction_type → The attraction type museums is not satisfied.
+
+============================================================
+🔎 PLAN idx = 223 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+❌ valid_cuisine → The cuisine mediterranean is not satisfied.
+
+============================================================
+🔎 PLAN idx = 225 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+
+============================================================
+🔎 PLAN idx = 226 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+
+============================================================
+🔎 PLAN idx = 227 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+❌ is_valid_information_in_sandbox → The accommodation in day 1 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 229 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+
+============================================================
+🔎 PLAN idx = 231 FAILURES:
+❌ is_valid_meal_gaps → Dinner is missing from PoI list on day 2.
+❌ is_valid_poi_sequence → PoI list for day 2 does not contain dinner.
+
+============================================================
+🔎 PLAN idx = 233 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+❌ valid_transportation → The transportation should not be self-driving or taxi.
+
+============================================================
+🔎 PLAN idx = 234 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+❌ is_not_absent → No attraction in day 2 is not allowed.
+
+============================================================
+🔎 PLAN idx = 236 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+❌ valid_room_rule → The house rule should be smoking.
+
+============================================================
+🔎 PLAN idx = 237 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 241 FAILURES:
+❌ is_valid_information_in_sandbox → The accommodation in day 1 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 243 FAILURES:
+❌ is_valid_meal_gaps → Dinner is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → Day 3 PoI list must start with previous accommodation and end with current accommodation.
+
+============================================================
+🔎 PLAN idx = 244 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 5.
+❌ is_valid_poi_sequence → PoI list for day 5 does not contain lunch.
+❌ is_valid_information_in_sandbox → The lunch in day 3 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 245 FAILURES:
+❌ is_valid_information_in_sandbox → The breakfast in day 4 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 246 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+❌ valid_room_rule → The house rule should be smoking.
+
+============================================================
+🔎 PLAN idx = 247 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+❌ valid_cuisine → The cuisine grill is not satisfied.
+
+============================================================
+🔎 PLAN idx = 248 FAILURES:
+❌ is_valid_meal_gaps → Breakfast is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain breakfast.
+❌ is_valid_information_in_sandbox → The attraction Sutter’s Fort State Historic Park, Sacramento in day 2 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 249 FAILURES:
+❌ is_valid_meal_gaps → Breakfast is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain breakfast.
+
+============================================================
+🔎 PLAN idx = 251 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 252 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+
+============================================================
+🔎 PLAN idx = 254 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+
+============================================================
+🔎 PLAN idx = 255 FAILURES:
+❌ is_valid_poi_sequence → PoI list for day 2 must start and end with accommodation.
+❌ valid_room_rule → The house rule should be pets.
+
+============================================================
+🔎 PLAN idx = 256 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 258 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+❌ valid_room_rule → The house rule should be parties.
+
+============================================================
+🔎 PLAN idx = 259 FAILURES:
+❌ is_not_absent → No attraction in day 4 is not allowed.
+
+============================================================
+🔎 PLAN idx = 260 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain breakfast.
+
+============================================================
+🔎 PLAN idx = 261 FAILURES:
+❌ is_valid_meal_gaps → Breakfast is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain breakfast.
+❌ is_valid_information_in_sandbox → The attraction Sutter’s Fort State Historic Park, Sacramento in day 2 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 262 FAILURES:
+❌ is_valid_meal_gaps → Breakfast is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain breakfast.
+
+============================================================
+🔎 PLAN idx = 263 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain breakfast.
+❌ valid_cuisine → The cuisine beer restaurants is not satisfied.
+
+============================================================
+🔎 PLAN idx = 264 FAILURES:
+❌ is_not_absent → No attraction in day 4 is not allowed.
+
+============================================================
+🔎 PLAN idx = 265 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+❌ valid_room_rule → The house rule should be smoking.
+
+============================================================
+🔎 PLAN idx = 267 FAILURES:
+❌ is_valid_information_in_sandbox → The accommodation in day 3 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 270 FAILURES:
+❌ valid_room_rule → The house rule should be parties.
+
+============================================================
+🔎 PLAN idx = 271 FAILURES:
+❌ is_valid_meal_gaps → Dinner is missing from PoI list on day 2.
+❌ is_valid_poi_sequence → PoI list for day 2 does not contain dinner.
+
+============================================================
+🔎 PLAN idx = 272 FAILURES:
+❌ is_valid_meal_gaps → Dinner is missing from PoI list on day 2.
+❌ is_valid_poi_sequence → PoI list for day 2 does not contain dinner.
+
+============================================================
+🔎 PLAN idx = 273 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+
+============================================================
+🔎 PLAN idx = 274 FAILURES:
+❌ is_valid_meal_gaps → Breakfast is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain breakfast.
+❌ is_valid_information_in_sandbox → The PoI nearest stops in day 3 have hallucinated data.
+
+============================================================
+🔎 PLAN idx = 275 FAILURES:
+❌ is_valid_meal_gaps → Breakfast is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain breakfast.
+❌ is_valid_information_in_sandbox → The PoI nearest stops in day 3 have hallucinated data.
+
+============================================================
+🔎 PLAN idx = 276 FAILURES:
+❌ is_valid_information_in_sandbox → The lunch in day 4 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 277 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 278 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 279 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+❌ valid_transportation → The transportation should not be self-driving or taxi.
+
+============================================================
+🔎 PLAN idx = 280 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+❌ valid_cuisine → The cuisine indian is not satisfied.
+
+============================================================
+🔎 PLAN idx = 281 FAILURES:
+❌ is_valid_meal_gaps → Dinner is missing from PoI list on day 1.
+❌ is_valid_poi_sequence → PoI list for day 1 does not contain dinner.
+❌ is_valid_information_in_sandbox → The PoI nearest stops in day 3 have hallucinated data.
+
+============================================================
+🔎 PLAN idx = 282 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+❌ valid_cuisine → The cuisine mexican is not satisfied.
+❌ valid_attraction_type → The attraction type shopping is not satisfied.
+
+============================================================
+🔎 PLAN idx = 283 FAILURES:
+❌ valid_event_type → The event type arts & theatre is not satisfied.
+
+============================================================
+🔎 PLAN idx = 284 FAILURES:
+❌ is_valid_meal_gaps → Dinner is missing from PoI list on day 2.
+❌ is_valid_poi_sequence → PoI list for day 2 does not contain dinner.
+❌ valid_event_type → The event type arts & theatre is not satisfied.
+
+============================================================
+🔎 PLAN idx = 290 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+
+============================================================
+🔎 PLAN idx = 291 FAILURES:
+❌ is_valid_poi_sequence → PoI list for day 4 must start and end with accommodation.
+
+============================================================
+🔎 PLAN idx = 292 FAILURES:
+❌ is_valid_poi_sequence → PoI list for day 4 must start and end with accommodation.
+❌ valid_room_rule → The house rule should be parties.
+
+============================================================
+🔎 PLAN idx = 293 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 294 FAILURES:
+❌ valid_room_rule → The house rule should be pets.
+
+============================================================
+🔎 PLAN idx = 296 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+❌ valid_room_rule → The house rule should be pets.
+
+============================================================
+🔎 PLAN idx = 298 FAILURES:
+❌ is_valid_information_in_sandbox → The accommodation in day 3 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 302 FAILURES:
+❌ is_valid_meal_gaps → Dinner is missing from PoI list on day 4.
+❌ is_valid_poi_sequence → PoI list for day 4 does not contain dinner.
+❌ valid_room_rule → The house rule should be parties.
+
+============================================================
+🔎 PLAN idx = 305 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 5.
+❌ is_valid_poi_sequence → PoI list for day 5 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 306 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+❌ valid_cuisine → The cuisine italian is not satisfied.
+❌ valid_transportation → The transportation should not be self-driving or taxi.
+
+============================================================
+🔎 PLAN idx = 307 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 308 FAILURES:
+❌ is_valid_meal_gaps → Dinner is missing from PoI list on day 2.
+❌ is_valid_poi_sequence → PoI list for day 2 does not contain dinner.
+❌ is_valid_information_in_sandbox → The accommodation in day 3 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 309 FAILURES:
+❌ is_valid_meal_gaps → Dinner is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → Day 3 PoI list must start with previous accommodation and end with current accommodation.
+❌ is_valid_information_in_sandbox → The flight number in day 5 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 310 FAILURES:
+❌ is_valid_poi_sequence → Day 3 PoI list must start with previous accommodation and end with current accommodation.
+❌ valid_cuisine → The cuisine italian is not satisfied.
+
+============================================================
+🔎 PLAN idx = 311 FAILURES:
+❌ valid_attraction_type → The attraction type museums is not satisfied.
+
+============================================================
+🔎 PLAN idx = 312 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+❌ is_not_absent → No attraction in day 4 is not allowed.
+
+============================================================
+🔎 PLAN idx = 313 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+❌ is_not_absent → No attraction in day 2 is not allowed.
+
+============================================================
+🔎 PLAN idx = 314 FAILURES:
+❌ is_valid_information_in_sandbox → The lunch in day 4 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 315 FAILURES:
+❌ valid_room_rule → The house rule should be smoking.
+
+============================================================
+🔎 PLAN idx = 316 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+
+============================================================
+🔎 PLAN idx = 317 FAILURES:
+❌ is_valid_information_in_sandbox → The breakfast in day 4 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 318 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+❌ is_not_absent → No attraction in day 2 is not allowed.
+
+============================================================
+🔎 PLAN idx = 320 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+❌ is_valid_information_in_sandbox → The accommodation in day 3 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 321 FAILURES:
+❌ is_valid_information_in_sandbox → The attraction Yakima Greenway, Yakima in day 3 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 323 FAILURES:
+❌ is_valid_meal_gaps → Not sufficient time gap between breakfast and lunch on day 2.
+❌ is_valid_information_in_sandbox → The accommodation in day 3 is invalid in the sandbox.
+
+============================================================
+🔎 PLAN idx = 324 FAILURES:
+❌ is_valid_meal_gaps → Lunch is missing from PoI list on day 3.
+❌ is_valid_poi_sequence → PoI list for day 3 does not contain lunch.
+❌ valid_attraction_type → The attraction type sights & landmarks is not satisfied.

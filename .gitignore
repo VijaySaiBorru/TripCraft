@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+*.jsonl
+*.tsv
+*.db
+
+# experiment outputs
+output_agentic/
+output_agentic_final/
+output_agentic_review_final/
+output_agentic_experiment/
+
+TripCraft_database/

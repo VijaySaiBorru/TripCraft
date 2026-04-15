@@ -1,0 +1,19 @@
+name: agentic
+channels:
+  - defaults
+dependencies:
+  - python=3.9
+  - pip
+  - pip:
+      - torch
+      - transformers
+      - accelerate
+      - openai
+      - pandas
+      - numpy
+      - tqdm
+      - huggingface-hub
+      - tokenizers
+      - safetensors
+      - requests
+      - pydantic
