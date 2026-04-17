@@ -67,6 +67,7 @@ class LLM:
         is_phi4   = "phi-4" in mn or "phi4" in mn
         is_llama = "llama" in mn
         is_deepseek = "deepseek" in mn
+        is_yi = "yi-" in mn or "yi/" in mn
         # print("MODEL NAME:", self.model_name)
         # print("is_deepseek:", is_deepseek)
 
@@ -155,74 +156,156 @@ class LLM:
             return text[len(self.tokenizer.decode(input_ids[0], skip_special_tokens=True)):].strip()
 
         # -------------------------------
-        # SPECIAL HANDLING FOR LLAMA (STRICT JSON MODE)
+        # SPECIAL HANDLING FOR LLAMA (DUAL MODE: JSON + POI TEXT)
         # -------------------------------
         if is_llama:
-            messages = [
-                {
-                    "role": "system",
-                    "content": (
-                        "You are a STRICT JSON generator.\n"
-                        "You must output ONLY valid JSON.\n"
-                        "Do NOT add explanations.\n"
-                        "Do NOT repeat answers.\n"
-                        "Do NOT add markdown.\n"
-                        "Stop after the JSON object."
-                    )
-                },
-                {"role": "user", "content": prompt}
-            ]
 
+            is_poi = "ITINERARY" in prompt and "REASONING" in prompt
+
+            if is_poi:
+                # ✅ POI MODE (TEXT OUTPUT)
+                messages = [
+                    {
+                        "role": "system",
+                        "content": (
+                            "Follow instructions EXACTLY.\n"
+                            "Output ONLY TWO sections in this order:\n"
+                            "REASONING\n"
+                            "ITINERARY\n"
+                            "Do NOT output JSON.\n"
+                            "Do NOT use markdown.\n"
+                            "Do NOT add extra text.\n"
+                            "Do NOT include explanations outside these sections.\n"
+                        )
+                    },
+                    {"role": "user", "content": prompt}
+                ]
+            else:
+                # ✅ JSON MODE (OTHER AGENTS)
+                messages = [
+                    {
+                        "role": "system",
+                        "content": (
+                            "You are a STRICT JSON generator.\n"
+                            "You must output ONLY valid JSON.\n"
+                            "Do NOT add explanations.\n"
+                            "Do NOT repeat answers.\n"
+                            "Do NOT add markdown.\n"
+                            "Stop after the JSON object.\n"
+                        )
+                    },
+                    {"role": "user", "content": prompt}
+                ]
+
+            # -------------------------------
+            # TOKENIZATION
+            # -------------------------------
             text = self.tokenizer.apply_chat_template(
                 messages,
                 tokenize=False,
                 add_generation_prompt=True
             )
-            # print(text)
 
             inputs = self.tokenizer(text, return_tensors="pt").to(self.model.device)
-            # print("INPUT TOKENS:", inputs.input_ids.shape[1])
 
+            # -------------------------------
+            # GENERATION
+            # -------------------------------
             with torch.no_grad():
                 output_ids = self.model.generate(
                     **inputs,
-                    max_new_tokens=2000,     # ✅ enough for 8–12 items
-                    do_sample=False,         # ✅ allow model to expand list
-                    repetition_penalty=1.1, # ✅ avoids repetition loops
+                    max_new_tokens=2000,
+                    do_sample=False,
+                    repetition_penalty=1.1,
                     eos_token_id=self.tokenizer.eos_token_id,
                     pad_token_id=self.tokenizer.eos_token_id,
                 )
-            # print("OUTPUT TOKENS:", output_ids.shape[1])
+
             gen_ids = output_ids[0][inputs.input_ids.shape[-1]:]
             text = self.tokenizer.decode(gen_ids, skip_special_tokens=True).strip()
-            # print("Output",text)
+            print("Output from LLaMA:", text)
 
-            # 🔥 CRITICAL FIX — extract ONLY valid JSON
+            # -------------------------------
+            # CLEAN OUTPUT
+            # -------------------------------
+            import re
+
+            # remove <think> blocks
+            text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
+
+            # remove markdown if any
+            text = text.replace("```json", "").replace("```", "").strip()
+
+            # -------------------------------
+            # POI MODE → RETURN TEXT
+            # -------------------------------
+            if is_poi:
+                # ensure output starts from REASONING
+                match = re.search(r"(REASONING.*)", text, re.DOTALL)
+                if match:
+                    text = match.group(1)
+
+                return text.strip()
+
+            # -------------------------------
+            # JSON MODE → EXTRACT JSON
+            # -------------------------------
             start = text.find("{")
             end = text.rfind("}")
 
             if start != -1 and end != -1 and end > start:
-                text = text[start:end + 1]
-            else:
-                raise ValueError("Invalid JSON from LLaMA")
+                return text[start:end + 1]
 
-            return text
+            raise ValueError("Invalid JSON from LLaMA")
         # -------------------------------
         # SPECIAL HANDLING FOR DEEPSEEK (STRICT JSON ONLY)
         # -------------------------------
         if is_deepseek:
-            messages = [
-                {
-                    "role": "system",
-                    "content": (
-                        "You must NOT output reasoning.\n"
-                        "Do NOT use <think> tags.\n"
-                        "Output ONLY ONE valid JSON object.\n"
-                        "STOP after the first JSON."
-                    )
-                },
-                {"role": "user", "content": prompt}
-            ]
+            is_poi = "ITINERARY" in prompt and "REASONING" in prompt
+            if is_poi:
+                # ✅ TEXT MODE (for POI agent)
+                messages =[
+        {
+                        "role": "system",
+                        "content": (
+                            "Do NOT use <think> tags.\n"
+                            "Do NOT add any explanation unless asked.\n"
+                            "Use ONLY English language.\n"
+                            "No extra text.\n"
+                            "No markdown.\n"
+                            "Do NOT use markdown (no ```).\n"
+                            "Do NOT add comments, hashtags, or notes.\n"
+                            "Follow instructions EXACTLY.\n"
+                            "Output ONLY TWO sections:\n"
+                            "REASONING\n"
+                            "ITINERARY\n"
+                            "Do NOT output JSON.\n"
+                            "Do NOT use markdown.\n"
+                            "Do NOT add extra text.\n"
+                        )
+                    },
+                    {"role": "user", "content": prompt}
+                ]
+            else:
+                messages = [
+                    {
+                        "role": "system",
+                        "content": (
+                            "You must NOT output reasoning.\n"
+                            "Do NOT use <think> tags.\n"
+                            "Output ONLY ONE valid JSON object.\n"
+                            "STOP after the first JSON.\n"
+                            "Do NOT add any explanation unless asked.\n"
+                            "Use ONLY English language.\n"\
+                            "Do NOT add text before or after JSON.\n"
+                            "No extra text.\n"
+                            "No markdown.\n"
+                            "Do NOT use markdown (no ```).\n"
+                            "Do NOT add comments, hashtags, or notes.\n"
+                        )
+                    },
+                    {"role": "user", "content": prompt}
+                ]
 
             text = self.tokenizer.apply_chat_template(
                 messages,
@@ -244,9 +327,9 @@ class LLM:
 
             gen_ids = output_ids[0][inputs.input_ids.shape[-1]:]
             text = self.tokenizer.decode(gen_ids, skip_special_tokens=True)
-            print("\n====== RAW DEEPSEEK OUTPUT ======\n")
-            print(text)
-            print("\n=================================\n")
+            # print("\n====== RAW DEEPSEEK OUTPUT ======\n")
+            # print(text)
+            # print("\n=================================\n")
 
             # -------------------------------
             # CLEAN OUTPUT
@@ -276,11 +359,20 @@ class LLM:
                                 return s[start:i + 1]
                 return None
 
+            if is_poi:
+                import re
+                match = re.search(r"(REASONING.*)", text, re.DOTALL)
+                # print("DEEPSEEK POI RAW OUTPUT:", text)
+                if match:
+                    text = match.group(1)
+                # print("PROMPT:", prompt)
+                # print("TEXT:", text)
+                return text.strip()
             json_block = extract_first_json(text)
 
             if not json_block:
                 raise ValueError("DeepSeek did not return valid JSON")
-
+            # print("Extracted JSON:", json_block)
             return json_block.strip()
 
         # -------------------------------
@@ -330,6 +422,77 @@ class LLM:
             return self.tokenizer.decode(gen_ids, skip_special_tokens=True).strip()
 
 
+        # -------------------------------
+        # SPECIAL HANDLING FOR YI
+        # -------------------------------
+        if is_yi:
+            messages = [
+                {
+                    "role": "system",
+                    "content": (
+                        "You are a STRICT JSON generator.\n"
+                        "You must output ONLY ONE valid JSON object.\n"
+                        "Do NOT add any explanation.\n"
+                        "Use ONLY English language.\n"
+                        "Do NOT use Chinese or any other language.\n"
+                        "Do NOT add text before or after JSON.\n"
+                        "No extra text.\n"
+                        "No markdown.\n"
+                        "Do NOT use markdown (no ```).\n"
+                        "Do NOT add comments, hashtags, or notes.\n"
+                        "Stop immediately after closing }.\n"
+                        "If output is not JSON, it is considered WRONG."
+                    )
+                },
+                {"role": "user", "content": prompt}
+            ]
+
+            text = self.tokenizer.apply_chat_template(
+                messages,
+                tokenize=False,
+                add_generation_prompt=True
+            )
+
+            inputs = self.tokenizer(
+                text,
+                return_tensors="pt",
+                truncation=True,
+                max_length=32000   
+            ).to(self.model.device)
+            print("INPUT TOKENS:", inputs.input_ids.shape[1])
+
+            with torch.no_grad():
+                output_ids = self.model.generate(
+                    **inputs,
+                    max_new_tokens=1500,
+                    do_sample=True,
+                    temperature=temperature,
+                    top_p=top_p,
+                    repetition_penalty=1.1,
+                    eos_token_id=self.tokenizer.eos_token_id,
+                    pad_token_id=self.tokenizer.eos_token_id,
+                )
+
+            gen_ids = output_ids[0][inputs.input_ids.shape[-1]:]
+            text = self.tokenizer.decode(gen_ids, skip_special_tokens=True)
+
+            # REMOVE markdown
+            text = text.replace("```json", "").replace("```", "").strip()
+            print("\n====== RAW YI OUTPUT ======\n")
+            print(text)
+
+            # EXTRACT JSON ONLY
+            start = text.find("{")
+            end = text.rfind("}")
+
+            if start != -1 and end != -1:
+                text = text[start:end+1]
+            else:
+                raise ValueError("Invalid JSON output")
+
+            return text
+            print("YI RAW OUTPUT:", self.tokenizer.decode(gen_ids, skip_special_tokens=True).strip())
+            return self.tokenizer.decode(gen_ids, skip_special_tokens=True).strip()
 
         # -------------------------------
         # NORMAL HF MODELS (Phi etc.)
@@ -404,15 +567,10 @@ def init_llm(model_name: str, api_key: str):
     # -------------------------------
     repo_map = {
         "qwen2.5": "Qwen/Qwen2.5-7B-Instruct",
-        "qwen3": "Qwen/Qwen3-14B",
         "phi4": "microsoft/Phi-4",
-        "phi3": "microsoft/Phi-3-mini-4k-instruct",
-        "qwen30b":"Qwen/Qwen3-30B-A3B-Instruct-2507",
         "llama": "meta-llama/Llama-3.1-70B-Instruct",
-        "codellama" : "codellama/CodeLlama-7b-Instruct-hf",
-        "mistral": "mistralai/Mistral-Nemo-Instruct-2407", # mistral 7b mistralai/Ministral-3-14B-Instruct-2512 
-        "deepseek": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
-
+        "mistral": "mistralai/Mistral-Nemo-Instruct-2407",
+        "deepseek": "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B"  #google/gemma-3-27b-it
     }
 
 
@@ -429,12 +587,13 @@ def init_llm(model_name: str, api_key: str):
     # Detect LLaMA
     # -------------------------------
     is_llama = "llama" in repo.lower()
+    is_yi = "yi" in repo.lower()
 
     # -------------------------------
     # Load model
     # -------------------------------
-    if is_llama:
-        print("🚀 Loading LLaMA with 4-bit (GPU ONLY)")
+    if is_llama or is_yi:
+        print("🚀 Loading model with 4-bit (GPU ONLY)")
 
         from transformers import BitsAndBytesConfig
 
@@ -449,7 +608,7 @@ def init_llm(model_name: str, api_key: str):
             repo,
             trust_remote_code=True,
             quantization_config=bnb_config,
-            device_map={"": 0},   # ✅ GPU ONLY
+            device_map={"": 0},   
             dtype=torch.float16,
             token=os.environ.get("HF_TOKEN")
         )

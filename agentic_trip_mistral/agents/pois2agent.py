@@ -436,7 +436,7 @@ class POIsAgent:
         checkin_start = arrival_buffer_end
         checkin_end = checkin_start + checkin_duration
 
-        step = 0
+        step = 1
         def STEP(title: str) -> str:
             nonlocal step
             block = f"""
@@ -464,12 +464,15 @@ class POIsAgent:
     - buffer_end = {arrival_buffer_end}
 
     ==============================
-    ARRIVAL CHECKIN
+    STEP 0 —  ARRIVAL CHECKIN(MANDATORY — NON-SKIPPABLE)
     ==============================
 
     Arrival accommodation check-in (FIXED):
     - stay_start = {checkin_start}
     - stay_end = {checkin_end}
+    EXECUTION RULE (ABSOLUTE):
+    - This STEP MUST ALWAYS be executed
+    - Skipping is FORBIDDEN
 
     Add POI EXACTLY as follows: (ALREADY DECIDED — DO NOT MODIFY):
     "{self.clean_place_name(accommodation.strip(), self.cities)}", stay from {checkin_start} to {checkin_end};
@@ -773,9 +776,16 @@ EXECUTION RULE (ABSOLUTE):
     IMPORTANT MEAL RULES:
     - Ideal start is OPTIONAL
     - Ideal start is a PREFERENCE ONLY
+    - You MUST NOT stop at the first feasible meal time; you MUST evaluate alternatives within the window
     - Not using the ideal start does NOT invalidate the meal
     - Any start time inside the window that satisfies feasibility rules is VALID
     - Do not skip melas for long attractions instead start early or late within the window
+    - Meals (breakfast, lunch, dinner) are MANDATORY and MUST NOT be skipped
+    - Feasibility has higher priority than ideal start time
+    - If ideal timing reduces number of attractions, you MUST choose another time within the window
+    - When multiple attractions exist:
+        → You MUST evaluate different meal timings within the window
+        → You MUST select the timing that allows maximum attractions
     """
 
         # STEP 0 — Day start
@@ -831,12 +841,61 @@ EXECUTION RULE (ABSOLUTE):
 - Lunch window end = 940
 
 Before scheduling ANY pre-lunch attraction:
-- current_time + BUFFER + 60 must be <= 940
+Let duration = PROVIDED attraction duration
+
+Check FULL feasibility:
+- current_time + BUFFER + duration + BUFFER + 60 <= 940
 
 If this condition FAILS:
-- Skip pre-lunch attraction
+- DO NOT schedule this attraction before lunch
+- Move this attraction to post-lunch consideration
 - Do NOT modify current_time
 - Proceed directly to Lunch
+
+ATTRACTION–MEAL CONSISTENCY RULE (ABSOLUTE):
+
+1. Minimum requirement:
+   - At least ONE attraction MUST be scheduled on NON_TRAVEL_DAY
+   - You are FORBIDDEN from skipping all attractions
+
+2. Meal priority:
+   - Meals (especially lunch and dinner) have HIGHER priority than attraction durations
+   - You MUST NOT skip meals due to long attractions
+
+3. Conflict resolution (STRICT ORDER):
+   If an attraction conflicts with a meal:
+   a) First, REDUCE attraction duration (minimum = 60 minutes)
+   b) If still not feasible, MOVE attraction (pre-lunch ↔ post-lunch)
+   c) If still not feasible, skip the attraction (ONLY as last resort)
+
+4. Multiple attractions handling:
+   - If there are 2 or more attractions:
+     → You MUST adjust durations to ensure meals remain feasible
+     → You MUST NOT keep original durations if they break meal timing
+
+5. Guarantee condition:
+   - At least ONE attraction MUST remain in the final schedule
+   - At least lunch and dinner MUST remain feasible whenever possible
+
+SPECIAL RULE — SINGLE ATTRACTION PRIORITY:
+
+If there is ONLY ONE attraction AND it blocks lunch feasibility:
+
+- DO NOT schedule it before lunch
+- Execute Lunch first (use earliest feasible time inside window)
+- Then schedule the attraction in post-lunch step
+
+LONG ATTRACTION ADJUSTMENT RULE:
+
+If there are MULTIPLE attractions AND duration >= 180 AND it blocks lunch:
+
+- Reduce duration ONLY for pre-lunch placement such that:
+  current_time + BUFFER + adjusted_duration + BUFFER + 60 <= 940
+
+- adjusted_duration MUST NOT be less than 60
+
+If still not feasible:
+- Move attraction to post-lunch
 
 ----------------------------------------------------
     - Select the FIRST attraction (shortest duration)
@@ -871,8 +930,9 @@ If NO attraction can be scheduled and completed early before lunch:
     - Do NOT schedule any other pre-lunch attractions
     - Proceed directly to Lunch
     
-    If Still not possible then
-    - Skip pre-lunch attraction
+   If still not possible:
+    - Move this attraction to post-lunch (DO NOT skip all attractions)
+
     
 
     """
@@ -890,6 +950,7 @@ If NO attraction can be scheduled and completed early before lunch:
         Define candidates:
         - Candidate A (IDEAL) = 880
         - Candidate B (EARLIEST) = current_time + BUFFER
+        - Candidate C (WINDOW START) = 720
 
         Feasibility check (apply to EACH candidate):
         A candidate is feasible ONLY IF:
@@ -898,11 +959,23 @@ If NO attraction can be scheduled and completed early before lunch:
         - candidate >= current_time + BUFFER
 
         Decision rule (ABSOLUTE):
-        - First evaluate Candidate A
-        - If Candidate A is feasible → lunch_start = Candidate A
-        - Else evaluate Candidate B
-        - If Candidate B is feasible → lunch_start = Candidate B
-        - Else → Skip lunch
+        - Evaluate ALL feasible candidates within the window:
+            - Candidate A = 880 (ideal)
+            - Candidate B = current_time + BUFFER
+            - Candidate C = 720 (window start)
+
+        - For EACH candidate:
+            Check feasibility:
+                - within window
+                - satisfies buffer
+                - allows maximum downstream feasibility (post-lunch attractions + dinner)
+
+        - Select lunch_start such that:
+            ✔ It is feasible
+            ✔ It allows MAXIMUM number of attractions
+
+        - If multiple candidates allow same number:
+            → choose closest to ideal (880)
 
         If lunch is executed:
         - lunch_end = lunch_start + 60
@@ -911,7 +984,15 @@ If NO attraction can be scheduled and completed early before lunch:
         - last_meal_end = lunch_end
         - current_time = lunch_end
         Else:
-        - Skip lunch
+       - Lunch MUST be scheduled (skipping is FORBIDDEN)
+        - You MUST find a valid lunch_start within the window [720, 940]
+
+        Resolution steps (STRICT ORDER):
+        1. Move conflicting attractions (pre ↔ post lunch)
+        2. Reduce attraction durations (minimum = 60)
+        3. Re-evaluate feasible start times within window
+
+        - Assign the earliest feasible lunch_start that satisfies all constraints
         """
 
         # STEP 5 — Post-lunch attractions
@@ -937,14 +1018,33 @@ If this condition FAILS:
     For each next attraction:
     - Let duration = PROVIDED attraction duration
     - attraction_start >= current_time + BUFFER
-    - attraction_end = attraction_start + duration
 
-    Rule:
-    - attraction_end + BUFFER <= 1320
+   DINNER PROTECTION RULE (ABSOLUTE):
+
+- dinner_latest_start = 1350 - 75 = 1275
+
+Before confirming attraction:
+
+- attraction_start >= current_time + BUFFER
+
+Check:
+- attraction_start + duration <= dinner_latest_start - BUFFER
+
+If this condition FAILS:
+
+    adjusted_duration = (dinner_latest_start - BUFFER) - attraction_start
+
+    If adjusted_duration >= 60:
+        - Use adjusted_duration instead of original duration
+        - attraction_end = attraction_start + adjusted_duration
+    Else:
+        - Skip this attraction
+        - Do NOT modify current_time
+        - Continue / Stop
 
     If rule passes:
     - Add POI EXACTLY as follows:
-    "<attraction>", visit from attraction_start to attraction_end;
+    <attraction>, visit from attraction_start to attraction_end;
     - current_time = attraction_end
     - used_attractions += 1
     Else:
@@ -964,6 +1064,7 @@ If this condition FAILS:
         Define candidates:
         - Candidate A (IDEAL) = 1245
         - Candidate B (EARLIEST) = current_time + BUFFER
+        - Candidate C (WINDOW START) = 1110
 
         Feasibility check (apply to EACH candidate):
         A candidate is feasible ONLY IF:
@@ -973,12 +1074,22 @@ If this condition FAILS:
         - candidate + 75 <= 1350
         - candidate >= current_time + BUFFER
 
-        Decision rule (ABSOLUTE):
-        - First evaluate Candidate A
-        - If Candidate A is feasible → dinner_start = Candidate A
-        - Else evaluate Candidate B
-        - If Candidate B is feasible → dinner_start = Candidate B
-        - Else → Skip dinner
+         Decision rule (ABSOLUTE):
+
+        - Evaluate ALL feasible candidates:
+            - Candidate A = 1245 (ideal)
+            - Candidate B = current_time + BUFFER
+            - Candidate C = 1110 (window start)
+
+        - For EACH candidate:
+            check feasibility
+
+        - Choose the one that:
+            ✔ keeps maximum attractions possible
+            ✔ satisfies all constraints
+
+        - If tie:
+            → choose closest to ideal
 
         If dinner is executed:
         - dinner_end = dinner_start + 75
@@ -987,7 +1098,15 @@ If this condition FAILS:
         - last_meal_end = dinner_end
         - current_time = dinner_end
         Else:
-        - Skip dinner
+        - Dinner MUST be scheduled (skipping is FORBIDDEN)
+        - You MUST find a valid dinner_start within the window [1110, 1350]
+
+        Resolution steps:
+        1. Adjust or remove conflicting attractions
+        2. Reduce durations if needed (>= 60)
+        3. Recompute feasible start time
+
+        - Assign a valid dinner_start within window
         """
 
         # STEP 7 — Overnight stay (NEXT DAY AWARE)
@@ -1985,6 +2104,9 @@ WAITING / GAP RULE (ABSOLUTE — HIGHEST PRIORITY):
 - If an activity starts later than current_time, the gap is implicit and MUST NOT be printed
 - current_time MUST remain unchanged until a STEP explicitly adds a POI
 
+- The itinerary MUST ALWAYS start with a STAY step
+- It MUST NOT be skipped under any condition
+
 STEP TYPE DEFINITIONS (ABSOLUTE — READ CAREFULLY):
 There are ONLY THREE types of steps:
 1. STAY STEPS
@@ -2003,7 +2125,11 @@ There are ONLY THREE types of steps:
    - ONLY these steps may use used_attraction_indices
    - ONLY these steps may add/remove indices
    - ONLY these steps consume attraction durations
-
+ATTRACTION UNIQUENESS RULE (ABSOLUTE):
+- Each attraction may appear AT MOST ONCE in the ITINERARY
+- If an attraction has already been used:
+    - It MUST NOT be scheduled again
+    - It MUST NOT appear again in POIs
 ==================================================
 OUTPUT FORMAT — ABSOLUTE (DO NOT VIOLATE)
 ==================================================

@@ -175,6 +175,7 @@ def main():
     # Init LLM backend
     print(f"[MAIN] Initializing LLM: {args.model_name}")
     llm = init_llm(args.model_name, args.api_key)
+    # print(f"[MAIN] Model initialized: {'mistral' in args.model_name.lower()}")
 
     planner = AgenticPlannerMistral(dm=dm, llm=llm) if "mistral" in args.model_name.lower() else AgenticPlanner(dm=dm, llm=llm)
     ref_builder = ReferenceBuilder(dm)
@@ -191,7 +192,7 @@ def main():
     else:
         count = -1
     # count = -1
-    stop =5
+    stop =370
 
 
     for idx in range(start, min(end, n)):

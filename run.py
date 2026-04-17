@@ -3,10 +3,10 @@ import sys
 import os
 import time
 
-REQUIRED_FREE = 20000      # MiB
+REQUIRED_FREE = 7000      # MiB
 CHECK_INTERVAL = 30        # seconds
 
-MODEL_NAME = "mistral" #mistral
+MODEL_NAME = "deepseek" #yi mistral deepseek llama
 DAY_TYPES = [3,5]
 
 OUTPUT_DIR = "output_agentic_experiment" #
