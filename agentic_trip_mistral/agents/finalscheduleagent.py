@@ -3,7 +3,7 @@ import json
 import re
 import os
 from typing import Any, Dict, List, Optional
-from agentic_trip_mistral.agents.pois2agent import POIsAgent
+from agentic_trip.agents.pois2agent import POIsAgent
 
 ValidationError = Dict[str, Any]
 ValidationResult = Dict[str, Any]
@@ -56,6 +56,24 @@ YOU MAY ONLY FILL OR UPDATE:
 - dinner
 - attraction
 
+FIELD COMPLETENESS RULE (ABSOLUTE):
+
+Each day object MUST contain ALL fields:
+
+- day
+- current_city
+- transportation
+- breakfast
+- attraction
+- lunch
+- dinner
+- accommodation
+
+You MUST NOT omit ANY field.
+
+If ANY field is missing:
+→ OUTPUT IS INVALID
+
 Use ONLY restaurants and attractions belonging to the city of that day.
 ***Do NOT repeat the attractions and restaurant names ,  While adding check the restaurant name or attraction name is present in other place or not . If not available then place it otherwise try with other.***
 
@@ -81,6 +99,29 @@ Only fields that are ALREADY "-" may remain "-".
 If the skeleton value is "", you MUST fill it.
 If the skeleton value is "-", you MUST set it to "-".
 If allowed options are not provided, choose ANY valid option from the city data.
+
+
+LOCAL CONSTRAINT SATISFACTION (IMPORTANT):
+
+- While selecting restaurants and attractions, you SHOULD TRY to satisfy local constraints whenever possible.
+- For restaurants:
+  → Prefer options that match the required cuisine (if provided)
+- For attractions:
+  → Prefer options that match the required attraction category (if provided)
+PRIORITY ORDER:
+1. MUST follow skeleton feasibility rules
+2. SHOULD satisfy local constraints when valid options exist
+3. If multiple valid options exist → choose one that satisfies constraints
+
+FALLBACK RULE:
+- If NO valid option satisfies local constraints:
+  → Choose the best available option
+  → DO NOT leave field empty
+  → DO NOT violate skeleton rules
+
+IMPORTANT:
+- Do NOT ignore valid constraint matches
+- Do NOT randomly pick options if a matching option exists
 
 ======================
 DAY PATTERN (REFERENCE ONLY)
@@ -1409,18 +1450,46 @@ class FinalScheduleAgent:
 
         return days
 
-    def _cities_for_prompt(self, cities: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """
-        Return a prompt-safe copy of cities WITHOUT raw_transit_rows.
-        """
+    def _cities_for_prompt(self, cities):
         clean = []
 
         for c in cities:
-            c2 = dict(c)  # shallow copy
+            c2 = {
+                "city": c["city"],
 
-            # ❌ remove heavy / irrelevant fields
-            c2.pop("raw_transit_rows", None)
-            c2.pop("events_ranked", None)
+                # ✅ KEEP restaurants (compressed)
+                "restaurants_ranked": [
+                    {
+                        "name": r.get("name"),
+                        "cuisine": (
+                            r.get("cuisines")[0]
+                            if isinstance(r.get("cuisines"), list) and r.get("cuisines")
+                            else r.get("cuisines")
+                        ),
+                        "avg_cost": r.get("avg_cost"),
+                        "rating": r.get("aggregate_rating"),
+                    }
+                    for r in c.get("restaurants_ranked", [])
+                ],
+
+                # ✅ KEEP attractions (compressed)
+                "attractions_ranked": [
+                    {
+                        "name": a.get("name"),
+                        "category": (
+                            a.get("categories")[0]
+                            if isinstance(a.get("categories"), list) and a.get("categories")
+                            else a.get("categories")
+                        )
+                    }
+                    for a in c.get("attractions_ranked", [])
+                ],
+
+                # ❌ REMOVE heavy junk
+                # raw_transit_rows already removed
+                # descriptions removed
+                # lat/long removed
+            }
 
             clean.append(c2)
 
@@ -1564,8 +1633,10 @@ class FinalScheduleAgent:
         # print("Prompt characters:", len(prompt_text))
         # print("Approx tokens:", len(prompt_text) // 4)
 
-        # with open("planner_prompt_debug.txt", "w", encoding="utf-8") as f:
-        #     f.write(prompt_text)
+        # with open("/scratch/sg/Vijay/TripCraft/debug/prompt.txt", "w", encoding="utf-8") as f:
+        #     f.write(prompt)
+
+        # print("✅ Prompt saved to debug/prompt.txt")
 
         # print("Prompt saved to planner_prompt_debug.txt")
         # print("==================================")
@@ -1587,6 +1658,9 @@ class FinalScheduleAgent:
             return {"error": "LLM returned invalid JSON", "raw": raw}
 
         days = parsed["days"]
+        #  HARD FIX: Preserve accommodation from skeleton
+        for i in range(len(days)):
+            days[i]["accommodation"] = days_skeleton[i]["accommodation"]
 
         validation = self.validate_plan(
             skeleton_days=days_skeleton,
@@ -1615,10 +1689,15 @@ class FinalScheduleAgent:
                 validation_errors=validation["errors"]
             )
             # print("Retry Prompt:",repair_prompt)
+            # with open("/scratch/sg/Vijay/TripCraft/debug/repair_prompt.txt", "w", encoding="utf-8") as f:
+            #     f.write(repair_prompt)
+
+            # print("✅ Repair prompt saved to debug/repair_prompt.txt")
 
             raw_retry = self.llm.generate(repair_prompt)
             # print("Retry Response:",raw_retry)
             parsed_retry = self._extract_json(raw_retry)
+            
 
             if not parsed_retry or "days" not in parsed_retry:
                 return {
@@ -1634,6 +1713,9 @@ class FinalScheduleAgent:
                 persona=structured_input.get("persona")
             )
             days=retry_validation["days"]
+            #  Preserve accommodation again after retry
+            for i in range(len(days)):
+                days[i]["accommodation"] = days_skeleton[i]["accommodation"]
 
             if not retry_validation["is_valid"]:
                 if retry_attempt >= 3:
@@ -1727,7 +1809,7 @@ class FinalScheduleAgent:
                 day["event"] = "-"
         
         pois_agent=POIsAgent(llm=self.llm)
-        print(parsed["days"])
+        # print(parsed["days"])
         poi_result = pois_agent.generate_poi_list(
             days=parsed["days"],
             structured_input=structured_input

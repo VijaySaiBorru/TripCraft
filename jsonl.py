@@ -5,7 +5,7 @@ import argparse
 
 # ---------------- CONSTANT BASE PATHS ----------------
 CSV_BASE = "/scratch/sg/Vijay/TripCraft"
-AGENTIC_ROOT = "/scratch/sg/Vijay/TripCraft/output_agentic_final/agentic"
+AGENTIC_ROOT = "/scratch/sg/Vijay/TripCraft/output_agentic_experiment/agentic"
 # ----------------------------------------------------
 
 

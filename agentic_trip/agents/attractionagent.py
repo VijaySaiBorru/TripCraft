@@ -225,7 +225,7 @@ class AttractionAgent:
                     "city": row.get("City"),
                 })
 
-        return results
+        return results[:30]
     # ----------------------------------------------------------
     # Build simplified prompt (NAMES ONLY)
     # ----------------------------------------------------------

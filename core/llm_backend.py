@@ -6,7 +6,8 @@ from dataclasses import dataclass
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from transformers import BitsAndBytesConfig
 import time
-
+from transformers import logging
+logging.set_verbosity_error()
 # ======================================================
 # Backend State Dataclass
 # ======================================================
@@ -20,7 +21,7 @@ class LLM:
     api_key: str = None
 
     # Unified generation function
-    def generate(self, prompt, max_new_tokens=2000, temperature=0.6, top_p=0.9):
+    def generate(self, prompt, max_new_tokens=2000):
         backend = self.backend
 
         # -------------------------------
@@ -30,8 +31,8 @@ class LLM:
             resp = self.client.chat.completions.create(
                 model=self.model_name,
                 messages=[{"role": "user", "content": prompt}],
-                temperature=temperature,
-                top_p=top_p,
+                temperature=0.6,
+                top_p=0.9,
                 max_tokens=max_new_tokens,
             )
             return resp.choices[0].message.content.strip()
@@ -146,8 +147,8 @@ class LLM:
                     attention_mask=attention_mask,
                     max_new_tokens=max_new_tokens,
                     do_sample=True,
-                    temperature=temperature,
-                    top_p=top_p,
+                    temperature=0.6,
+                    top_p=0.9,
                     pad_token_id=self.tokenizer.eos_token_id,
                     eos_token_id=self.tokenizer.eos_token_id,
                 )
@@ -223,7 +224,7 @@ class LLM:
 
             gen_ids = output_ids[0][inputs.input_ids.shape[-1]:]
             text = self.tokenizer.decode(gen_ids, skip_special_tokens=True).strip()
-            print("Output from LLaMA:", text)
+            # print("Output from LLaMA:", text)
 
             # -------------------------------
             # CLEAN OUTPUT
@@ -261,11 +262,12 @@ class LLM:
         # SPECIAL HANDLING FOR DEEPSEEK (STRICT JSON ONLY)
         # -------------------------------
         if is_deepseek:
+            import time
+            start_time = time.time()
             is_poi = "ITINERARY" in prompt and "REASONING" in prompt
             if is_poi:
                 # ✅ TEXT MODE (for POI agent)
-                messages =[
-        {
+                messages =[{
                         "role": "system",
                         "content": (
                             "Do NOT use <think> tags.\n"
@@ -314,11 +316,12 @@ class LLM:
             )
 
             inputs = self.tokenizer(text, return_tensors="pt").to(self.model.device)
+            # print("INPUT TOKENS:", inputs.input_ids.shape[1])
 
             with torch.no_grad():
                 output_ids = self.model.generate(
                     **inputs,
-                    max_new_tokens=3000,          # 🔥 REDUCED (CRITICAL FIX)
+                    max_new_tokens=2000,          # 🔥 REDUCED (CRITICAL FIX)
                     do_sample=False,             # 🔒 deterministic
                     repetition_penalty=1.1,      # 🔥 prevents loops
                     eos_token_id=self.tokenizer.eos_token_id,
@@ -367,32 +370,61 @@ class LLM:
                     text = match.group(1)
                 # print("PROMPT:", prompt)
                 # print("TEXT:", text)
+                end_time = time.time()   # ⏱️ END TIMER
+                # print(f"⏱️ DeepSeek Generation Time: {end_time - start_time:.2f} seconds")
                 return text.strip()
             json_block = extract_first_json(text)
 
             if not json_block:
                 raise ValueError("DeepSeek did not return valid JSON")
             # print("Extracted JSON:", json_block)
+            end_time = time.time()   # ⏱️ END TIMER
+            # print(f"⏱️ DeepSeek Generation Time: {end_time - start_time:.2f} seconds")
             return json_block.strip()
 
         # -------------------------------
         # SPECIAL HANDLING FOR MISTRAL
         # -------------------------------
         if "mistral" in mn:
+            is_poi = "ITINERARY" in prompt and "REASONING" in prompt
 
-            messages = [
-                {
-                    "role": "system",
-                    "content": (
-                        "You are a strict instruction-following assistant.\n"
-                        "Follow the user request exactly.\n"
-                        "If JSON is requested, output ONLY JSON.\n"
-                        "Do not add explanations unless asked."
-                    )
-                },
-                {"role": "user", "content": prompt}
-            ]
-
+            if is_poi:
+                # ✅ POI MODE (STRICT TEXT)
+                messages = [
+                    {
+                        "role": "system",
+                        "content": (
+                            "You are a strict instruction-following assistant.\n"
+                            "Follow the user request exactly.\n"
+                            "Follow instructions EXACTLY.\n"
+                            "Do NOT output JSON.\n"
+                            "Do NOT use markdown.\n"
+                            "Do NOT add extra text.\n"
+                            "Output EXACTLY TWO sections:\n"
+                            "REASONING\n"
+                            "ITINERARY\n"
+                            "Nothing else.\n"
+                            "Do NOT use markdown (no ```).\n"
+                            "Do NOT add comments, hashtags, or notes.\n"
+                        )
+                    },
+                    {"role": "user", "content": prompt}
+                ]
+            else:
+                # ✅ JSON MODE (STRICT)
+                messages = [
+                    {
+                        "role": "system",
+                        "content": (
+                            "You are a strict instruction-following assistant.\n"
+                            "Follow the user request exactly.\n"
+                            "If JSON is requested, output ONLY JSON.\n"
+                            "Do not add explanations unless asked."
+                        )
+                    },
+                    {"role": "user", "content": prompt}
+                ]
+           
             text = self.tokenizer.apply_chat_template(
                 messages,
                 tokenize=False,
@@ -409,15 +441,15 @@ class LLM:
                     **inputs,
                     max_new_tokens=2000,
                     do_sample=True,
-                    temperature=temperature,
-                    top_p=top_p,
+                    temperature=0.6,
+                    top_p=0.9,
                     repetition_penalty=1.1,
                     eos_token_id=self.tokenizer.eos_token_id,
                     pad_token_id=self.tokenizer.eos_token_id,
                 )
 
             gen_ids = output_ids[0][inputs.input_ids.shape[-1]:]
-            print("MISTRAL RAW OUTPUT:", self.tokenizer.decode(gen_ids, skip_special_tokens=True).strip())
+            # print("MISTRAL RAW OUTPUT:", self.tokenizer.decode(gen_ids, skip_special_tokens=True).strip())
 
             return self.tokenizer.decode(gen_ids, skip_special_tokens=True).strip()
 
@@ -466,8 +498,8 @@ class LLM:
                     **inputs,
                     max_new_tokens=1500,
                     do_sample=True,
-                    temperature=temperature,
-                    top_p=top_p,
+                    temperature=0.6,
+                    top_p=0.9,
                     repetition_penalty=1.1,
                     eos_token_id=self.tokenizer.eos_token_id,
                     pad_token_id=self.tokenizer.eos_token_id,
@@ -498,18 +530,18 @@ class LLM:
         # NORMAL HF MODELS (Phi etc.)
         # -------------------------------
         inputs = self.tokenizer(prompt, return_tensors="pt").to(self.model.device)
-        print("INPUT TOKENS:", inputs.input_ids.shape[1])
+        # print("INPUT TOKENS:", inputs.input_ids.shape[1])
 
         with torch.no_grad():
             gen = self.model.generate(
                 **inputs,
                 do_sample=True,
-                temperature=temperature,
-                top_p=top_p,
+                temperature=0.6,
+                top_p=0.9,
                 max_new_tokens=max_new_tokens,
                 pad_token_id=self.tokenizer.eos_token_id,
             )
-        print("OUTPUT TOKENS:", gen.shape[1],"OUTPUT:", self.tokenizer.decode(gen[0], skip_special_tokens=True).strip())
+        # print("OUTPUT TOKENS:", gen.shape[1],"OUTPUT:", self.tokenizer.decode(gen[0], skip_special_tokens=True).strip())
         return self.tokenizer.decode(gen[0], skip_special_tokens=True).strip()
 
 

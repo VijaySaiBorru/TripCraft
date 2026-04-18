@@ -1,18 +1,10 @@
-# agentic_trip/tools/poi2.py
-
 import json
 import sys
 import os
 from pathlib import Path
 from typing import Any, Dict, List,Optional
-from core.llm_backend import init_llm
 
 import re
-
-def save_debug_prompt(path: str, content: str):
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(content)
 
 def extract_itinerary(response: str) -> str:
     # 1️⃣ Find ITINERARY header (case-insensitive)
@@ -159,7 +151,7 @@ class POIsAgent:
         CSV_PATH = os.path.abspath(
             os.path.join(
                 BASE_DIR,
-                "../TripCraft/TripCraft_database/public_transit_gtfs/all_poi_nearest_stops.csv"
+                "../../TripCraft_database/public_transit_gtfs/all_poi_nearest_stops.csv"
             )
         )
 
@@ -842,55 +834,108 @@ EXECUTION RULE (ABSOLUTE):
 
         # STEP 3 — Pre-lunch attraction
         if attractions:
-            instructions += STEP("Pre-lunch attraction (FORCED FIT BEFORE LUNCH)") + """
-        CRITICAL LUNCH AVAILABILITY RULE (ABSOLUTE):
+            instructions += STEP("Pre-lunch attraction (ONLY IF SAFE)") + """
+            CRITICAL LUNCH AVAILABILITY CHECK (ABSOLUTE):
 
-        - Lunch duration = 60
-        - Lunch window end = 940
+- Lunch duration = 60
+- Lunch window end = 940
 
-        ----------------------------------------------------
-        MANDATORY DURATION FITTING (ONLY LOGIC — NO SKIP)
-        ----------------------------------------------------
+Before scheduling ANY pre-lunch attraction:
+Let duration = PROVIDED attraction duration
 
-        - Select FIRST attraction
+Check FULL feasibility:
+- current_time + BUFFER + duration + BUFFER + 60 <= 940
 
-        - base_duration = PROVIDED attraction duration
+If this condition FAILS:
+- DO NOT schedule this attraction before lunch
+- Move this attraction to post-lunch consideration
+- Do NOT modify current_time
+- Proceed directly to Lunch
 
-        - Compute maximum allowed duration:
+ATTRACTION–MEAL CONSISTENCY RULE (ABSOLUTE):
 
-        max_allowed_duration = 940 - (current_time + BUFFER + BUFFER + 60)
+1. Minimum requirement:
+   - At least ONE attraction MUST be scheduled on NON_TRAVEL_DAY
+   - You are FORBIDDEN from skipping all attractions
 
-        - duration = min(base_duration, max_allowed_duration)
+2. Meal priority:
+   - Meals (especially lunch and dinner) have HIGHER priority than attraction durations
+   - You MUST NOT skip meals due to long attractions
 
-        - If duration < 60:
-            duration = 60
+3. Conflict resolution (STRICT ORDER):
+   If an attraction conflicts with a meal:
+   a) First, REDUCE attraction duration (minimum = 60 minutes)
+   b) If still not feasible, MOVE attraction (pre-lunch ↔ post-lunch)
+   c) If still not feasible, skip the attraction (ONLY as last resort)
 
-        ----------------------------------------------------
-        PLACEMENT
-        ----------------------------------------------------
+4. Multiple attractions handling:
+   - If there are 2 or more attractions:
+     → You MUST adjust durations to ensure meals remain feasible
+     → You MUST NOT keep original durations if they break meal timing
 
-        - attraction_start = current_time + BUFFER
-        - attraction_end = attraction_start + duration
+5. Guarantee condition:
+   - At least ONE attraction MUST remain in the final schedule
+   - At least lunch and dinner MUST remain feasible whenever possible
 
-        ----------------------------------------------------
-        EXECUTION (MANDATORY — NO SKIP)
-        ----------------------------------------------------
+SPECIAL RULE — SINGLE ATTRACTION PRIORITY:
 
-        - Add POI EXACTLY as follows:
-        <attraction>, visit from attraction_start to attraction_end;
+If there is ONLY ONE attraction AND it blocks lunch feasibility:
 
-        - current_time = attraction_end
-        - used_attractions = 1
+- DO NOT schedule it before lunch
+- Execute Lunch first (use earliest feasible time inside window)
+- Then schedule the attraction in post-lunch step
 
-        ----------------------------------------------------
-        ABSOLUTE GUARANTEE
-        ----------------------------------------------------
+LONG ATTRACTION ADJUSTMENT RULE:
 
-        - This STEP MUST ALWAYS be executed if any attraction exists
-        - You are FORBIDDEN from skipping this STEP
-        - Duration MUST be reduced to make it fit before lunch
-        - DO NOT re-check feasibility after duration adjustment
-        """
+If there are MULTIPLE attractions AND duration >= 180 AND it blocks lunch:
+
+- Reduce duration ONLY for pre-lunch placement such that:
+  current_time + BUFFER + adjusted_duration + BUFFER + 60 <= 940
+
+- adjusted_duration MUST NOT be less than 60
+
+If still not feasible:
+- Move attraction to post-lunch
+
+----------------------------------------------------
+    - Select the FIRST attraction (shortest duration)
+    - Let duration = PROVIDED attraction duration
+
+    Tentative placement:
+    - attraction_start >= current_time + BUFFER
+    - attraction_end = attraction_start + duration
+
+    Rules:
+    - If duration >= 180:
+    - attraction_end must be <= 940
+    - Else:
+    - attraction_end must be <= 880
+
+    If rules pass:
+    - Add POI EXACTLY as follows:
+    "<attraction>", visit from attraction_start to attraction_end;
+    - current_time = attraction_end
+    - used_attractions = 1
+    Else:
+    SPECIAL PRE-LUNCH FULL-BLOCK ATTRACTION RULE (ABSOLUTE):
+
+If NO attraction can be scheduled and completed early before lunch:
+
+- You MAY schedule exactly ONE attraction that occupies the full pre-lunch time block
+- This attraction MUST:
+    - Start at current_time + BUFFER
+    - End NO LATER than 850 (14:10)
+- The attraction duration is implicitly determined by this window
+- After this attraction:
+    - Do NOT schedule any other pre-lunch attractions
+    - Proceed directly to Lunch
+    
+   If still not possible:
+    - Move this attraction to post-lunch (DO NOT skip all attractions)
+
+    
+
+    """
 
         # STEP 4 — Lunch
         if lunch and lunch != "-":
@@ -1018,7 +1063,7 @@ If this condition FAILS:
 
         Define candidates:
         - Candidate A (IDEAL) = 1245
-        - Candidate B (EARLIEST) = max(1110, current_time + BUFFER)
+        - Candidate B (EARLIEST) = current_time + BUFFER
         - Candidate C (WINDOW START) = 1110
 
         Feasibility check (apply to EACH candidate):
@@ -1065,38 +1110,38 @@ If this condition FAILS:
         """
 
         # STEP 7 — Overnight stay (NEXT DAY AWARE)
-
-        # --- compute in code ---
-        if next_day_departure_time is not None:
-            departure_abs = next_day_departure_time + 1440
-
-            if next_day_breakfast_same_city:
-                overnight_end = departure_abs - (30 + 50 + 30 + 30)  # BUFFER + BREAKFAST + BUFFER + STAY
-            else:
-                overnight_end = departure_abs - (30 + 30)  # BUFFER + STAY
-
-            # clamp to max 1920 (08:00 next day)
-            overnight_end = min(overnight_end, 1920)
+        # Decide ONCE in code
+        if next_day_breakfast_same_city:
+            overnight_formula = (
+                "departure_abs - (BUFFER + BREAKFAST_DURATION + BUFFER + STAY_DURATION)"
+            )
         else:
-            overnight_end = 1920  # safe default
+            overnight_formula = (
+                "departure_abs - (BUFFER + STAY_DURATION)"
+            )
 
-        # --- pass FIXED value to LLM ---
-        instructions += STEP("Overnight stay (FIXED END)") + f"""
-        AUTHORITATIVE VALUE (DO NOT COMPUTE):
+        instructions += STEP("Overnight stay (NEXT DAY AWARE)") + f"""
+AUTHORITATIVE NEXT DAY CONTEXT:
+- next_day_departure_time = {next_day_departure_time if next_day_departure_time is not None else "NONE"}
 
-        - overnight_end = {overnight_end}
+Execution (ABSOLUTE — NO ALTERNATIVES):
+- departure_abs = next_day_departure_time + 1440
+- overnight_end = {overnight_formula}
 
-        RULES (ABSOLUTE):
+CRITICAL (ABSOLUTE):
+- overnight_end = min(computed_value, 1920)
+- Overnight stay MUST NOT extend past 08:00 under any condition
+- overnight_end MUST be used EXACTLY as computed above
+- overnight_end MUST NOT be modified
+- NO default value exists
+- NO safety-based adjustment is allowed
+- This STEP produces EXACTLY ONE STAY POI
 
-        - You are FORBIDDEN from recomputing this value
-        - You are FORBIDDEN from modifying this value
-        - overnight_end MUST be used EXACTLY as given
-        - overnight_end MUST be > current_time
+Final:
+- Add POI EXACTLY as follows:
+{self.clean_place_name(accommodation.strip(), self.cities)}, stay from current_time to overnight_end;
+"""
 
-        Final:
-        - Add POI EXACTLY as follows:
-        {self.clean_place_name(accommodation.strip(), self.cities)}, stay from current_time to overnight_end;
-        """
         return instructions.strip()
 
     def build_last_day_execution_hints(
@@ -2071,6 +2116,17 @@ There are ONLY THREE types of steps:
 2. MEAL STEPS
    - Examples: breakfast, lunch, dinner, generic MEAL
    - NEVER use used_attraction_indices
+   EXECUTION RULE (ABSOLUTE):
+    - If a MEAL STEP is executed:
+        - It MUST produce EXACTLY ONE POI
+        - That POI MUST appear in the ITINERARY
+
+    STATE UPDATE:
+    - current_time MUST be updated to meal_end
+    - last_meal_end MUST be updated to meal_end
+
+    FORBIDDEN:
+    - Executing a meal without emitting a POI
    - May update:
        - current_time
        - last_meal_end
@@ -2085,22 +2141,6 @@ ATTRACTION UNIQUENESS RULE (ABSOLUTE):
 - If an attraction has already been used:
     - It MUST NOT be scheduled again
     - It MUST NOT appear again in POIs
-
-STRICT SEQUENTIAL EXECUTION RULE (ABSOLUTE):
-
-- Every STEP must start strictly AFTER the previous STEP ends
-
-- For any STEP:
-    step_start MUST be:
-        >= previous_step_end + BUFFER
-
-- It is FORBIDDEN to:
-    - Start a STEP before the previous STEP ends
-    - Overlap any two POIs
-    - Ignore current_time while assigning start times
-
-- current_time is the ONLY valid reference for next STEP
-
 ==================================================
 OUTPUT FORMAT — ABSOLUTE (DO NOT VIOLATE)
 ==================================================
@@ -2469,17 +2509,6 @@ ABSOLUTE:
             #     print(f"[POI] Day {idx + 1} prompt:\n{prompt}\n{'-'*40}\n")
             # debug_dir = Path("/scratch/sg/Vijay/TripCraft/debug/poi_llm")
             # debug_dir.mkdir(parents=True, exist_ok=True)
-            if idx == 1:  # Day 2
-                save_debug_prompt(
-                    "/scratch/sg/Vijay/TripCraft/debug/non_travel_day_prompt_day_2.txt",
-                    prompt
-                )
-
-            if idx == 2:  # Day 3
-                save_debug_prompt(
-                    "/scratch/sg/Vijay/TripCraft/debug/inter_city_day_prompt_day_3.txt",
-                    prompt
-                )
 
 
             # --------------------------------------------------
@@ -2588,53 +2617,3 @@ ABSOLUTE:
 
         self._add_stay_transit_post_llm(result, days, structured_input)
         return result
-   
-
-
-# ----------------------------------------------------------
-# CLI runner
-# ----------------------------------------------------------
-def main():
-    if len(sys.argv) != 4:
-        print("Usage: python poihelper.py <query_number> <model_name> <api_key>")
-        sys.exit(1)
-
-    query_no = sys.argv[1]
-    model_name = sys.argv[2]
-    api_key = sys.argv[3]
-
-    os.environ["OPENAI_API_KEY"] = api_key
-    os.environ["GEMINI_API_KEY"] = api_key
-    os.environ["GOOGLE_API_KEY"] = api_key
-
-    llm = init_llm(model_name, api_key)
-    agent = POIsAgent(llm)
-
-    base = Path(
-        "/scratch/sg/Vijay/TripCraft/output_agentic_experiment/agentic"
-    ) / "llama" / "5day" / query_no
-
-    combined_ref_path = base / "combined_reference.json"
-    manual_plan_path = base / "tripcraft_response.json"
-    output_path = base / "poi_itinerary.json"
-
-    with open(combined_ref_path) as f:
-        combined = json.load(f)
-
-    with open(manual_plan_path) as f:
-        manual = json.load(f)
-
-    days = manual.get("days") if isinstance(manual, dict) else manual
-
-    result = agent.generate_poi_list(days, combined)
-
-    with open(output_path, "w") as f:
-        json.dump(result, f, indent=2)
-
-    print(f"[DONE] POI itinerary saved → {output_path}")
-
-
-if __name__ == "__main__":
-    main()
-
-    

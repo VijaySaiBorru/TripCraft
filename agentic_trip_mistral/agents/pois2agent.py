@@ -834,109 +834,81 @@ EXECUTION RULE (ABSOLUTE):
 
         # STEP 3 — Pre-lunch attraction
         if attractions:
-            instructions += STEP("Pre-lunch attraction (ONLY IF SAFE)") + """
-            CRITICAL LUNCH AVAILABILITY CHECK (ABSOLUTE):
+            instructions += STEP("Pre-lunch attraction (FIT ONE WITH CONTROLLED REDUCTION)") + """
+        CRITICAL RULES:
 
-- Lunch duration = 60
-- Lunch window end = 940
+        - Lunch duration = 60
+        - Lunch window end = 940
+        - At least ONE attraction MUST be placed before or after lunch
 
-Before scheduling ANY pre-lunch attraction:
-Let duration = PROVIDED attraction duration
+        ----------------------------------------------------
+        SELECT ATTRACTION
+        ----------------------------------------------------
 
-Check FULL feasibility:
-- current_time + BUFFER + duration + BUFFER + 60 <= 940
+        - Select FIRST attraction (shortest duration)
+        - base_duration = PROVIDED duration
 
-If this condition FAILS:
-- DO NOT schedule this attraction before lunch
-- Move this attraction to post-lunch consideration
-- Do NOT modify current_time
-- Proceed directly to Lunch
+        ----------------------------------------------------
+        STEP 1 — TRY FULL DURATION
+        ----------------------------------------------------
 
-ATTRACTION–MEAL CONSISTENCY RULE (ABSOLUTE):
+        Check feasibility:
 
-1. Minimum requirement:
-   - At least ONE attraction MUST be scheduled on NON_TRAVEL_DAY
-   - You are FORBIDDEN from skipping all attractions
+        current_time + BUFFER + base_duration + BUFFER + 60 <= 940
 
-2. Meal priority:
-   - Meals (especially lunch and dinner) have HIGHER priority than attraction durations
-   - You MUST NOT skip meals due to long attractions
+        IF TRUE:
+            duration = base_duration
 
-3. Conflict resolution (STRICT ORDER):
-   If an attraction conflicts with a meal:
-   a) First, REDUCE attraction duration (minimum = 60 minutes)
-   b) If still not feasible, MOVE attraction (pre-lunch ↔ post-lunch)
-   c) If still not feasible, skip the attraction (ONLY as last resort)
+        ----------------------------------------------------
+        STEP 2 — CONTROLLED REDUCTION (ONLY IF NEEDED)
+        ----------------------------------------------------
 
-4. Multiple attractions handling:
-   - If there are 2 or more attractions:
-     → You MUST adjust durations to ensure meals remain feasible
-     → You MUST NOT keep original durations if they break meal timing
+        ELSE:
 
-5. Guarantee condition:
-   - At least ONE attraction MUST remain in the final schedule
-   - At least lunch and dinner MUST remain feasible whenever possible
+            max_allowed_duration =
+                940 - (current_time + BUFFER + BUFFER + 60)
 
-SPECIAL RULE — SINGLE ATTRACTION PRIORITY:
+            IF max_allowed_duration >= 90:
+                duration = max_allowed_duration
+            ELSE:
+                duration = 90
 
-If there is ONLY ONE attraction AND it blocks lunch feasibility:
+        ----------------------------------------------------
+        STEP 3 — FINAL CHECK
+        ----------------------------------------------------
 
-- DO NOT schedule it before lunch
-- Execute Lunch first (use earliest feasible time inside window)
-- Then schedule the attraction in post-lunch step
+        IF duration + current_time + BUFFER + BUFFER + 60 > 940:
+            - Move attraction to post-lunch
+            - Do NOT modify current_time
+            - Proceed to Lunch
 
-LONG ATTRACTION ADJUSTMENT RULE:
+        ----------------------------------------------------
+        PLACEMENT
+        ----------------------------------------------------
 
-If there are MULTIPLE attractions AND duration >= 180 AND it blocks lunch:
+        - attraction_start = current_time + BUFFER
+        - attraction_end = attraction_start + duration
 
-- Reduce duration ONLY for pre-lunch placement such that:
-  current_time + BUFFER + adjusted_duration + BUFFER + 60 <= 940
+        ----------------------------------------------------
+        EXECUTION
+        ----------------------------------------------------
 
-- adjusted_duration MUST NOT be less than 60
+        - Add POI EXACTLY as follows:
+        <attraction>, visit from attraction_start to attraction_end;
 
-If still not feasible:
-- Move attraction to post-lunch
+        - current_time = attraction_end
+        - used_attractions = 1
 
-----------------------------------------------------
-    - Select the FIRST attraction (shortest duration)
-    - Let duration = PROVIDED attraction duration
+        ----------------------------------------------------
+        GUARANTEES
+        ----------------------------------------------------
 
-    Tentative placement:
-    - attraction_start >= current_time + BUFFER
-    - attraction_end = attraction_start + duration
-
-    Rules:
-    - If duration >= 180:
-    - attraction_end must be <= 940
-    - Else:
-    - attraction_end must be <= 880
-
-    If rules pass:
-    - Add POI EXACTLY as follows:
-    "<attraction>", visit from attraction_start to attraction_end;
-    - current_time = attraction_end
-    - used_attractions = 1
-    Else:
-    SPECIAL PRE-LUNCH FULL-BLOCK ATTRACTION RULE (ABSOLUTE):
-
-If NO attraction can be scheduled and completed early before lunch:
-
-- You MAY schedule exactly ONE attraction that occupies the full pre-lunch time block
-- This attraction MUST:
-    - Start at current_time + BUFFER
-    - End NO LATER than 850 (14:10)
-- The attraction duration is implicitly determined by this window
-- After this attraction:
-    - Do NOT schedule any other pre-lunch attractions
-    - Proceed directly to Lunch
-    
-   If still not possible:
-    - Move this attraction to post-lunch (DO NOT skip all attractions)
-
-    
-
-    """
-
+        - You MUST attempt pre-lunch placement
+        - Full duration is preferred
+        - Reduction is ONLY applied when necessary
+        - Minimum meaningful duration = 90 (NOT 60)
+        - DO NOT skip unless completely impossible
+        """
         # STEP 4 — Lunch
         if lunch and lunch != "-":
             instructions += STEP("Lunch") + f"""
