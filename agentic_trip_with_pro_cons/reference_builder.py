@@ -3,7 +3,7 @@ import ast
 import pandas as pd
 from typing import Any, Dict, Iterable, List, Optional
 import math
-from agentic_trip_with_review.filter_manager import FilterManager
+from agentic_trip_with_pro_cons.filter_manager import FilterManager
 
 def normalize_flights(raw):
     if raw is None:

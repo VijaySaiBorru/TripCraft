@@ -1,84 +1,68 @@
-import csv
-import json
-import sys
+import pandas as pd
+
+path = "/scratch/sg/Vijay/TripCraft/TripCraft_database/review_pro_cons/attraction_review_pro_cons_fixed.csv"
+
+df = pd.read_csv(path)
+
+print("=== BASIC INFO ===")
+print("Shape:", df.shape)
+
+print("\n=== COLUMNS ===")
+print(df.columns.tolist())
+
+print("\n=== REQUIRED COLUMNS CHECK ===")
+required = ["City", "Name", "attraction_index", "pros", "cons"]
+for col in required:
+    print(f"{col}: {'✅' if col in df.columns else '❌'}")
+
+print("\n=== NULL COUNTS ===")
+print(df[["pros", "cons"]].isnull().sum())
 
 
-# -----------------------------
-# NEW CITY EXTRACTION (CORRECT)
-# -----------------------------
+# -------------------------------
+# Parse
+# -------------------------------
+def parse_pipe(text):
+    if pd.isna(text) or str(text).strip() == "":
+        return []
+    return [x.strip() for x in str(text).split("|") if x.strip()]
 
-def extract_cities_from_refs(row, city_count):
-    cities = []
-
-    for i in range(1, city_count + 1):
-        key = f"reference_information_{i}"
-        ref = row.get(key)
-
-        if not ref:
-            cities.append("")
-            continue
-
-        try:
-            data = json.loads(ref)
-
-            if isinstance(data, list) and len(data) > 0:
-                desc = data[0].get("Description", "")
-
-                if " in " in desc:
-                    city = desc.split(" in ")[-1].strip()
-                    cities.append(city)
-                else:
-                    cities.append("")
-            else:
-                cities.append("")
-
-        except:
-            cities.append("")
-
-    return cities
+df["pros_list"] = df["pros"].apply(parse_pipe)
+df["cons_list"] = df["cons"].apply(parse_pipe)
 
 
-# -----------------------------
-# MAIN CHECK SCRIPT
-# -----------------------------
+# -------------------------------
+# RANDOM SAMPLES
+# -------------------------------
+print("\n=== RANDOM SAMPLES ===")
+sample = df.sample(5, random_state=42)
 
-def main():
-
-    if len(sys.argv) != 2:
-        print("Usage: python check.py <3|5|7>")
-        return
-
-    day_type = int(sys.argv[1])
-    city_count = {3: 1, 5: 2, 7: 3}[day_type]
-
-    input_csv = f"/scratch/sg/Vijay/TripCraft/tripcraft_{day_type}day.csv"
-
-    with open(input_csv, newline="", encoding="utf-8") as f:
-        rows = list(csv.DictReader(f))
-
-    invalid_rows = 0
-
-    for idx, row in enumerate(rows):
-
-        cities = extract_cities_from_refs(row, city_count)
-
-        # remove empty
-        valid_cities = [c for c in cities if c and c.strip()]
-
-        # DEBUG (your problematic rows)
-        if idx in [47, 171, 172, 301, 328]:
-            print("\n==== DEBUG ROW ====")
-            print("Cities Extracted:", cities)
-
-        if len(valid_cities) < city_count:
-            print(f"❌ Row {idx} INVALID -> {cities}")
-            invalid_rows += 1
-
-    print("\n-----------------------------")
-    print(f"Total rows: {len(rows)}")
-    print(f"Invalid rows: {invalid_rows}")
-    print("-----------------------------")
+for _, row in sample.iterrows():
+    print("\n---")
+    print("Name:", row["Name"])
+    print("Pros:", row["pros_list"])
+    print("Cons:", row["cons_list"])
 
 
-if __name__ == "__main__":
-    main()
+# -------------------------------
+# LENGTH STATS
+# -------------------------------
+print("\n=== LENGTH STATS ===")
+print("Pros:", df["pros_list"].apply(len).describe())
+print("Cons:", df["cons_list"].apply(len).describe())
+
+
+# -------------------------------
+# ZERO LIST COUNTS
+# -------------------------------
+print("\n=== ZERO LIST COUNTS ===")
+print("No pros:", (df["pros_list"].apply(len) == 0).sum())
+print("No cons:", (df["cons_list"].apply(len) == 0).sum())
+
+
+# -------------------------------
+# DUPLICATES
+# -------------------------------
+print("\n=== DUPLICATE CHECK ===")
+print("Duplicate index:", df.duplicated(subset=["attraction_index"]).sum())
+print("Duplicate (City, Name):", df.duplicated(subset=["City", "Name"]).sum())

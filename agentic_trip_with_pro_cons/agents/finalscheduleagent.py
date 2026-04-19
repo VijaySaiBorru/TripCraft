@@ -3,7 +3,7 @@ import json
 import re
 import os
 from typing import Any, Dict, List, Optional
-from agentic_trip_with_review.agents.pois2agent import POIsAgent
+from agentic_trip_with_pro_cons.agents.pois2agent import POIsAgent
 
 ValidationError = Dict[str, Any]
 ValidationResult = Dict[str, Any]
