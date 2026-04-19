@@ -490,10 +490,20 @@ IMPORTANT:
 
 Do NOT use any external knowledge beyond the data provided in the attraction list.
 
-SPECIAL PRIORITY:
-- The FIRST 3–4 attractions SHOULD satisfy explicit attraction-type preferences from local_constraints when possible.
-- If not enough such attractions exist, include as many as possible at the top, then fill remaining positions with the next best matches.
+TOP PRIORITY RULE (STRICT):
+- The FIRST 3-6 attractions MUST match categories specified in local_constraints["attraction"], if such attractions exist.
+- If enough matching attractions exist:
+  → ALL top 6 MUST belong to those categories.
+- If insufficient:
+  → include as many matching attractions as possible at the top
+  → fill remaining positions with best alternatives.
 
+PRIORITY ORDER (STRICT):
+1. local_constraints attraction match (HIGHEST)
+2. persona category alignment
+3. pros relevance
+4. cons penalties
+  
 IMPORTANT:
 - Ranking means RELATIVE PERSONA RELEVANCE only.
 - Use ONLY the fields provided in the attraction list (no external knowledge).
@@ -529,10 +539,11 @@ represent the TYPES of attractions the user WANTS TO EXPERIENCE.
 
 DATA-ALIGNED RULES (STRICT):
 - Treat attraction categories as POSITIVE PREFERENCES only
-- Categories MUST influence ranking
+- Categories from local_constraints MUST dominate ranking for top results.
 - Attractions matching these categories should be ranked higher
 - Attractions with other categories MUST NOT be excluded
 - Attraction categories are NEVER hard filters in this dataset
+- Attractions that do NOT match local_constraints["attraction"] should be ranked BELOW matching ones whenever possible.
 
 Attractions should ONLY be excluded if they:
 - clearly violate safety constraints

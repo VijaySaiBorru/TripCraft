@@ -6,7 +6,7 @@ import time
 REQUIRED_FREE = 2000      # MiB
 CHECK_INTERVAL = 30        # seconds
 
-MODEL_NAME = "qwen2.5"
+MODEL_NAME = "phi4" #qwen2.5 phi4 mistral deepseek llama
 DAY_TYPES = [3,5,7]
 
 OUTPUT_DIR = "output_agentic_review_experiment"

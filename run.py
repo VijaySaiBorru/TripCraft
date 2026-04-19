@@ -6,8 +6,8 @@ import time
 REQUIRED_FREE = 31000      # MiB
 CHECK_INTERVAL = 30        # seconds
 
-MODEL_NAME = "mistral" #yi mistral deepseek llama
-DAY_TYPES = [5]
+MODEL_NAME = "mistral" # mistral deepseek llama
+DAY_TYPES = [3,5,7]
 
 OUTPUT_DIR = "output_agentic_experiment" #
 BASEPATH = "./TripCraft_database"
