@@ -192,7 +192,7 @@ def main():
     else:
         count = -1
     # count = -1
-    stop =370
+    stop =0
 
 
     for idx in range(start, min(end, n)):

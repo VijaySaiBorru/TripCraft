@@ -7,7 +7,7 @@ REQUIRED_FREE = 2000      # MiB
 CHECK_INTERVAL = 30        # seconds
 
 MODEL_NAME = "qwen2.5"
-DAY_TYPES = [3]
+DAY_TYPES = [3,5,7]
 
 OUTPUT_DIR = "output_agentic_review_experiment"
 BASEPATH = "./TripCraft_database"

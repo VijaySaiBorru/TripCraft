@@ -298,6 +298,11 @@ class AttractionAgent:
                             start = None
         return {}
 
+    def parse_pipe(self, text):
+        if not text or str(text).strip() == "" or str(text).lower() == "nan":
+            return []
+        return [x.strip() for x in str(text).split("|") if x.strip()]
+    
     def get_attractions_for_city(
         self,
         city: str,
@@ -630,7 +635,7 @@ ONLY return the JSON above.
 
         # Call LLM
         try:
-            print("Attraction Prompt:",prompt)
+            # print("Attraction Prompt:",prompt)
             response = self.llm.generate(prompt)
             # print("The response:",response)
         except Exception as e:
