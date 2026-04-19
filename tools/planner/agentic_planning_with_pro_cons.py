@@ -21,7 +21,8 @@ import pandas as pd
 from pathlib import Path
 from data_manager.data_manager import DataManager
 from agentic_trip_with_pro_cons.reference_builder import ReferenceBuilder
-from agentic_trip_with_pro_cons.agenticplanner import AgenticPlanner
+from agentic_trip_with_pro_cons.agenticplanner import AgenticPlanner as AgenticPlanner
+from agentic_trip_with_pro_cons_mistral.agenticplanner import AgenticPlanner as AgenticPlannerMistral
 from core.llm_backend import init_llm
 from extract_query import extract_query
 
@@ -174,8 +175,9 @@ def main():
     # Init LLM backend
     print(f"[MAIN] Initializing LLM: {args.model_name}")
     llm = init_llm(args.model_name, args.api_key)
+    # print(f"[MAIN] Model initialized: {'mistral' in args.model_name.lower()}")
 
-    planner = AgenticPlanner(dm=dm, llm=llm)
+    planner = AgenticPlannerMistral(dm=dm, llm=llm) if "mistral" in args.model_name.lower() else AgenticPlanner(dm=dm, llm=llm)
     ref_builder = ReferenceBuilder(dm)
 
     start = args.start_idx
@@ -188,9 +190,9 @@ def main():
     elif day_type_check == 7:
         count = -1
     else:
-        count = 1
+        count = -1
     # count = -1
-    stop = 370
+    stop =370
 
 
     for idx in range(start, min(end, n)):
@@ -385,3 +387,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# source ~/.bashrc
+# tmux new -s gpu_job
+# conda activate tripcraftvijay
