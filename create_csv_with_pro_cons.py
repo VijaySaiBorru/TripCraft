@@ -1,4 +1,4 @@
-# /scratch/sg/Vijay/TripCraft/create_csv_with_review_summary.py
+# /scratch/sg/Vijay/TripCraft/create_csv_with_pro_cons.py
 
 import csv
 import json
@@ -251,6 +251,12 @@ def compute_travel_dates(all_dates, day_type):
 # Accommodation extraction
 # --------------------------------------------------
 
+def parse_pipe(text):
+    if not text or str(text).strip().lower() in ("", "nan"):
+        return []
+    return [x.strip() for x in str(text).split("|") if x.strip()]
+
+
 def get_accommodations_for_city(city, persona=None, max_results=25):
 
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -262,18 +268,21 @@ def get_accommodations_for_city(city, persona=None, max_results=25):
         )
     )
 
+    # ✅ USE THIS FILE (already has pros/cons)
     REVIEW_PATH = os.path.abspath(
         os.path.join(
             BASE_DIR,
-            "TripCraft_database/review_signal/accomodation_review_summary_with_persona.csv"
+            "TripCraft_database/review_pro_cons/accomodation_review_pro_cons.csv"
         )
     )
 
     review_by_index = {}
     review_by_name = {}
 
+    # ------------------------------
+    # LOAD PROS / CONS
+    # ------------------------------
     if os.path.exists(REVIEW_PATH):
-
         with open(REVIEW_PATH, newline="", encoding="utf-8") as f:
             reader = csv.DictReader(f)
 
@@ -288,45 +297,42 @@ def get_accommodations_for_city(city, persona=None, max_results=25):
                     row["City"].strip().lower(),
                     row["Name"].strip().lower()
                 )
-
                 review_by_name[key] = row
 
     results = []
     city = city.strip().lower()
-    persona_idx = get_persona_index(persona) if persona else 1
 
     with open(CSV_PATH, newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
 
         for row in reader:
 
-            if not row.get("City"):
+            if row.get("City", "").strip().lower() != city:
                 continue
 
-            if row["City"].strip().lower() != city:
-                continue
-
+            # ---- price ----
             try:
                 pricing_dict = ast.literal_eval(row.get("pricing", ""))
-                price_str = pricing_dict.get("price")
-                if not price_str:
-                    continue
-                price = float(price_str.replace("$", ""))
+                price = float(pricing_dict.get("price").replace("$", ""))
             except:
                 continue
 
-            rating = None
+            # ---- rating ----
             try:
                 rating_dict = ast.literal_eval(row.get("rating", ""))
                 rating = rating_dict.get("average")
             except:
-                pass
+                rating = None
 
+            # ---- occupancy ----
             try:
                 max_occ = int(row.get("max_occupancy"))
             except:
                 continue
 
+            # -----------------------------
+            # REVIEW LOOKUP (PROS / CONS)
+            # -----------------------------
             review = None
 
             try:
@@ -336,44 +342,21 @@ def get_accommodations_for_city(city, persona=None, max_results=25):
                 pass
 
             if review is None:
-
                 key = (
                     row.get("City", "").strip().lower(),
                     row.get("name", "").strip().lower()
                 )
-
                 review = review_by_name.get(key)
 
-            review_summary = None
-            num_reviews = None
-            accommodation_quality = None
-            comfort_signal = None
-            cleanliness_signal = None
-            location_signal = None
-            host_signal = None
-            amenities_signal = None
-            noise_risk = None
-            safety_risk = None
-            alignment = None
-            utility = None
+            pros = []
+            cons = []
 
             if review:
+                pros.extend(parse_pipe(review.get("Pros")))
+                cons.extend(parse_pipe(review.get("Cons")))
 
-                review_summary = review.get("Review_Summary")
-                num_reviews = float(review.get("num_reviews") or 0)
-
-                accommodation_quality = float(review.get("accommodation_quality") or 0)
-                comfort_signal = float(review.get("comfort_signal") or 0)
-                cleanliness_signal = float(review.get("cleanliness_signal") or 0)
-                location_signal = float(review.get("location_signal") or 0)
-                host_signal = float(review.get("host_signal") or 0)
-                amenities_signal = float(review.get("amenities_signal") or 0)
-
-                noise_risk = float(review.get("noise_risk") or 0)
-                safety_risk = float(review.get("safety_risk") or 0)
-
-                alignment = float(review.get(f"persona_{persona_idx}_alignment") or 0)
-                utility = float(review.get(f"persona_{persona_idx}_utility") or 0)
+            pros = list(dict.fromkeys(pros))
+            cons = list(dict.fromkeys(cons))
 
             results.append({
                 "name": row.get("name"),
@@ -383,21 +366,10 @@ def get_accommodations_for_city(city, persona=None, max_results=25):
                 "minimum_nights": 1,
                 "maximum_occupancy": max_occ,
                 "review_rate": rating,
-                "city": row.get("City"),
-
-                "num_reviews": num_reviews,
-                "accommodation_quality": accommodation_quality,
-                "comfort_signal": comfort_signal,
-                "cleanliness_signal": cleanliness_signal,
-                "location_signal": location_signal,
-                "host_signal": host_signal,
-                "amenities_signal": amenities_signal,
-                "noise_risk": noise_risk,
-                "safety_risk": safety_risk,
-                "persona_alignment": alignment,
-                "persona_utility": utility,
-
-                "review_summary": review_summary
+                "pros": pros,
+                "cons": cons,
+                "pros_count": len(pros),
+                "cons_count": len(cons)
             })
 
     results = [
@@ -405,12 +377,7 @@ def get_accommodations_for_city(city, persona=None, max_results=25):
         if h.get("price_per_night") not in (None, math.inf)
     ]
 
-    results.sort(
-        key=lambda h: (
-            h.get("price_per_night", math.inf),
-            -(float(h.get("accommodation_quality") or 0))
-        )
-    )
+    results.sort(key=lambda h: h.get("price_per_night", math.inf))
 
     return results[:max_results]
 
@@ -594,7 +561,21 @@ def build_transport_ref(
     conn.close()
     return transport_ref
 
-def get_restaurants_for_city(city, persona_json=None, max_results=40):
+def extract_multi_reviews(review_rows, parse_pipe):
+    pros = []
+    cons = []
+
+    for r in review_rows:
+        pros.extend(parse_pipe(r.get("Pros") or r.get("pros")))
+        cons.extend(parse_pipe(r.get("Cons") or r.get("cons")))
+
+    # remove duplicates
+    pros = list(dict.fromkeys(pros))
+    cons = list(dict.fromkeys(cons))
+
+    return pros, cons
+
+def get_restaurants_for_city(city, persona_json=None, max_results=30):
 
     BASE = os.path.dirname(os.path.abspath(__file__))
 
@@ -605,27 +586,21 @@ def get_restaurants_for_city(city, persona_json=None, max_results=40):
 
     REVIEW_PATH = os.path.join(
         BASE,
-        "TripCraft_database/review_signal/restaurant_review_summary_with_persona.csv"
+        "TripCraft_database/review_pro_cons/restaurant_review_pro_cons_clean.csv"
     )
 
     review_by_index = {}
     review_by_name = {}
 
-    # ----------------------------------
-    # LOAD REVIEW SIGNALS
-    # ----------------------------------
-
+    # ✅ FIX: store LIST per index
     if os.path.exists(REVIEW_PATH):
-
         with open(REVIEW_PATH, newline="", encoding="utf-8") as f:
-
             reader = csv.DictReader(f)
 
             for row in reader:
-
                 try:
                     idx = int(float(row["restaurant_index"]))
-                    review_by_index[idx] = row
+                    review_by_index.setdefault(idx, []).append(row)
                 except:
                     pass
 
@@ -633,61 +608,38 @@ def get_restaurants_for_city(city, persona_json=None, max_results=40):
                     row["City"].strip().lower(),
                     row["Name"].strip().lower()
                 )
-
                 review_by_name.setdefault(key, []).append(row)
 
     city = city.lower().strip()
     results = []
 
-    persona_idx = get_persona_index(persona_json) if persona_json else 1
-
     with open(CSV_PATH, newline="", encoding="utf-8") as f:
-
         reader = csv.DictReader(f)
 
-        for r in reader:
+        for row in reader:
 
-            # -----------------------
-            # City filter
-            # -----------------------
-
-            if r.get("City", "").lower().strip() != city:
+            if row.get("City", "").lower().strip() != city:
                 continue
 
-            name = r.get("name")
-
+            name = row.get("name")
             if not name:
                 continue
 
-            # -----------------------
-            # Avg cost
-            # -----------------------
-
             try:
-                avg_cost = float(r["avg_cost"])
+                avg_cost = float(row["avg_cost"])
                 if avg_cost <= 0:
                     continue
             except:
                 continue
 
-            # -----------------------
-            # Rating
-            # -----------------------
-
             try:
-                rating = float(r["rating"])
+                rating = float(row["rating"])
             except:
                 rating = None
 
-            # -----------------------
-            # Cuisines
-            # -----------------------
-
             cuisines = []
-
             try:
-                raw = r.get("cuisines")
-
+                raw = row.get("cuisines")
                 if raw:
                     cuisines = [
                         c.strip().lower()
@@ -695,133 +647,59 @@ def get_restaurants_for_city(city, persona_json=None, max_results=40):
                         if isinstance(c, str)
                     ]
             except:
-                cuisines = []
+                pass
 
-            # -----------------------
+            # -----------------------------
             # REVIEW LOOKUP
-            # -----------------------
-
+            # -----------------------------
             review_rows = []
 
             try:
-                idx = int(float(r.get("restaurant_index")))
+                idx = int(float(row.get("restaurant_index")))
                 rr = review_by_index.get(idx)
-
                 if rr:
-                    review_rows = [rr]
-
+                    review_rows = rr   # ✅ FIX
             except:
                 pass
 
             if not review_rows:
-
                 key = (
-                    r.get("City", "").strip().lower(),
+                    row.get("City", "").strip().lower(),
                     name.strip().lower()
                 )
-
                 review_rows = review_by_name.get(key, [])
 
-            # -----------------------
-            # AGGREGATE REVIEW SIGNALS
-            # -----------------------
+            # ✅ MULTI EXTRACTION
+            pros, cons = extract_multi_reviews(review_rows, parse_pipe)
 
-            restaurant_quality = None
-            food_signal = None
-            service_signal = None
-            ambience_signal = None
-            value_signal = None
-            menu_variety_signal = None
-            wait_risk = None
-            hygiene_risk = None
-            alignment = None
-            utility = None
-            review_summary = None
-
-            if review_rows:
-
-                def avg(field):
-
-                    vals = []
-
-                    for rr in review_rows:
-                        try:
-                            vals.append(float(rr.get(field)))
-                        except:
-                            pass
-
-                    return sum(vals)/len(vals) if vals else None
-
-                restaurant_quality = avg("restaurant_quality")
-                food_signal = avg("food_signal")
-                service_signal = avg("service_signal")
-                ambience_signal = avg("ambience_signal")
-                value_signal = avg("value_signal")
-                menu_variety_signal = avg("menu_variety_signal")
-
-                wait_risk = avg("wait_risk")
-                hygiene_risk = avg("hygiene_risk")
-
-                alignment = avg(f"persona_{persona_idx}_alignment")
-                utility = avg(f"persona_{persona_idx}_utility")
-
-                summaries = [
-                    rr.get("Review_Summary")
-                    for rr in review_rows
-                    if rr.get("Review_Summary")
-                ]
-
-                if summaries:
-                    review_summary = max(summaries, key=len)
-
-            # -----------------------
-            # Final object
-            # -----------------------
+            if not pros:
+                pros = ["good food"]
+            if not cons:
+                cons = ["no major issues"]
 
             results.append({
-
                 "name": name,
                 "avg_cost": avg_cost,
                 "cuisines": cuisines,
                 "aggregate_rating": rating,
-
-                # review signals
-                "restaurant_quality": restaurant_quality,
-                "food_signal": food_signal,
-                "service_signal": service_signal,
-                "ambience_signal": ambience_signal,
-                "value_signal": value_signal,
-                "menu_variety_signal": menu_variety_signal,
-
-                "wait_risk": wait_risk,
-                "hygiene_risk": hygiene_risk,
-
-                "persona_alignment": alignment,
-                "persona_utility": utility,
-
-                "review_summary": review_summary
+                "pros": pros,
+                "cons": cons,
+                "pros_count": len(pros),
+                "cons_count": len(cons)
             })
-
-    # ----------------------------------
-    # SORT (same as agent)
-    # ----------------------------------
 
     results.sort(
         key=lambda r: (
-            -(r.get("persona_alignment") or 0),
-            -(r.get("persona_utility") or 0),
-            -(r.get("restaurant_quality") or 0),
-            -(r.get("food_signal") or 0),
-            (r.get("wait_risk") or 1),
-            (r.get("hygiene_risk") or 1),
+            -(r.get("pros_count") or 0),
+            (r.get("cons_count") or 0) * 3,
+            -(r.get("aggregate_rating") or 0),
             r.get("avg_cost", float("inf"))
         )
     )
 
     return results[:max_results]
 
-
-def get_attractions_for_city(city, persona_json=None, max_results=50):
+def get_attractions_for_city(city, persona_json=None, max_results=40):
 
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -832,26 +710,21 @@ def get_attractions_for_city(city, persona_json=None, max_results=50):
 
     REVIEW_PATH = os.path.join(
         BASE_DIR,
-        "TripCraft_database/review_signal/attraction_review_summary_with_persona.csv"
+        "TripCraft_database/review_pro_cons/attraction_review_pro_cons_fixed.csv"
     )
 
     review_by_index = {}
     review_by_name = {}
 
-    # ----------------------------------
-    # LOAD REVIEW SIGNALS
-    # ----------------------------------
+    # ✅ FIX: store LIST
     if os.path.exists(REVIEW_PATH):
-
         with open(REVIEW_PATH, newline="", encoding="utf-8") as f:
-
             reader = csv.DictReader(f)
 
             for row in reader:
-
                 try:
                     idx = int(float(row["attraction_index"]))
-                    review_by_index[idx] = row
+                    review_by_index.setdefault(idx, []).append(row)
                 except:
                     pass
 
@@ -859,16 +732,12 @@ def get_attractions_for_city(city, persona_json=None, max_results=50):
                     row["City"].strip().lower(),
                     row["Name"].strip().lower()
                 )
-
                 review_by_name.setdefault(key, []).append(row)
 
     city = city.strip().lower()
-    persona_idx = get_persona_index(persona_json) if persona_json else 1
-
     results = []
 
     with open(CSV_PATH, newline="", encoding="utf-8") as f:
-
         reader = csv.DictReader(f)
 
         for row in reader:
@@ -876,9 +745,6 @@ def get_attractions_for_city(city, persona_json=None, max_results=50):
             if row.get("City", "").strip().lower() != city:
                 continue
 
-            # -------------------
-            # Categories
-            # -------------------
             categories = []
             try:
                 raw = row.get("subcategories") or row.get("subtype")
@@ -891,127 +757,57 @@ def get_attractions_for_city(city, persona_json=None, max_results=50):
             except:
                 pass
 
-            # -------------------
-            # Visit duration
-            # -------------------
             try:
                 visit_duration = float(row.get("visit_duration"))
             except:
                 visit_duration = None
 
-            # -------------------
+            # -----------------------------
             # REVIEW LOOKUP
-            # -------------------
+            # -----------------------------
             review_rows = []
 
             try:
                 idx = int(float(row.get("attraction_index")))
-                r = review_by_index.get(idx)
-                if r:
-                    review_rows = [r]
+                rr = review_by_index.get(idx)
+                if rr:
+                    review_rows = rr   # ✅ FIX
             except:
                 pass
 
             if not review_rows:
-
                 key = (
                     row.get("City", "").strip().lower(),
                     row.get("name", "").strip().lower()
                 )
-
                 review_rows = review_by_name.get(key, [])
 
-            # -------------------
-            # REVIEW SIGNALS
-            # -------------------
-            attraction_quality = None
-            experience_signal = None
-            nature_signal = None
-            culture_signal = None
-            family_signal = None
-            facility_signal = None
-            tour_signal = None
-            shopping_signal = None
-            crowd_risk = None
-            safety_risk = None
-            alignment = None
-            utility = None
-            review_summary = None
+            # ✅ MULTI EXTRACTION
+            pros, cons = extract_multi_reviews(review_rows, parse_pipe)
 
-            if review_rows:
-
-                def avg(field):
-                    vals = []
-                    for r in review_rows:
-                        try:
-                            vals.append(float(r.get(field)))
-                        except:
-                            pass
-                    return sum(vals)/len(vals) if vals else None
-
-                attraction_quality = avg("attraction_quality")
-                experience_signal = avg("experience_signal")
-                nature_signal = avg("nature_signal")
-                culture_signal = avg("culture_signal")
-                family_signal = avg("family_signal")
-                facility_signal = avg("facility_signal")
-                tour_signal = avg("tour_signal")
-                shopping_signal = avg("shopping_signal")
-
-                alignment = avg(f"persona_{persona_idx}_alignment")
-                utility = avg(f"persona_{persona_idx}_utility")
-
-                crowd_risk = avg("crowd_risk")
-                safety_risk = avg("safety_risk")
-
-                summaries = [
-                    r.get("Review_Summary")
-                    for r in review_rows
-                    if r.get("Review_Summary")
-                ]
-
-                if summaries:
-                    review_summary = max(summaries, key=len)
+            if not pros:
+                pros = ["nice place"]
+            if not cons:
+                cons = ["no major issues"]
 
             results.append({
                 "name": row.get("name"),
                 "categories": categories,
-                "description": row.get("description") or "",
                 "visit_duration": visit_duration,
-
-                # review signals
-                "attraction_quality": attraction_quality,
-                "experience_signal": experience_signal,
-                "nature_signal": nature_signal,
-                "culture_signal": culture_signal,
-                "family_signal": family_signal,
-                "facility_signal": facility_signal,
-                "tour_signal": tour_signal,
-                "shopping_signal": shopping_signal,
-
-                "persona_alignment": alignment,
-                "persona_utility": utility,
-
-                "crowd_risk": crowd_risk,
-                "safety_risk": safety_risk,
-
-                "review_summary": review_summary
+                "pros": pros,
+                "cons": cons,
+                "pros_count": len(pros),
+                "cons_count": len(cons)
             })
 
-    # same ranking logic as agent
     results.sort(
         key=lambda a: (
-            -(a.get("persona_alignment") or 0),
-            -(a.get("persona_utility") or 0),
-            -(a.get("attraction_quality") or 0),
-            -(a.get("experience_signal") or 0),
-            (a.get("crowd_risk") or 1),
-            (a.get("safety_risk") or 1),
+            -(a.get("pros_count") or 0),
+            (a.get("cons_count") or 0) * 3,
         )
     )
 
     return results[:max_results]
-
 
 def get_events_for_city(city, travel_dates, max_results=40):
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -1115,7 +911,7 @@ def main():
         raise ValueError("day_type must be 3, 5, or 7")
 
     input_csv = f"/scratch/sg/Vijay/TripCraft/tripcraft_{day_type}day.csv"
-    output_csv = f"/scratch/sg/Vijay/TripCraft/tripcraft_{day_type}day_review_inputs.tsv"
+    output_csv = f"/scratch/sg/Vijay/TripCraft/tripcraft_{day_type}day_pro_cons_inputs.tsv"
 
     city_count = {3: 1, 5: 2, 7: 3}[day_type]
 

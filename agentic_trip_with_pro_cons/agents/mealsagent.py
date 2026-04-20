@@ -628,7 +628,7 @@ LOCAL CONSTRAINTS:
 
 SOFT FILTERS (ranking influence only):
 ----------------------------------------------------
-- cuisine preferences from persona or local_constraints
+- cuisine preferences from persona 
 - budget friendliness
 
 ====================================================
