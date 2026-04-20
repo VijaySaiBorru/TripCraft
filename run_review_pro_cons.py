@@ -7,7 +7,7 @@ REQUIRED_FREE = 2000      # MiB
 CHECK_INTERVAL = 30       # seconds
 
 #  MULTI-MODEL 
-MODEL_NAMES = ["phi4","mistral","llama","deepseek"]  # add, "qwen2.5", "phi4", "mistral","deepseek","llama"
+MODEL_NAMES = ["qwen2.5","mistral","llama","deepseek"]  # add, "qwen2.5", "phi4", "mistral","deepseek","llama"
 DAY_TYPES = [3,5,7]
 
 OUTPUT_DIR = "output_agentic_review_pro_cons_final"
