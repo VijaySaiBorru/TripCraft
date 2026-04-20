@@ -380,9 +380,14 @@ ONLY pure JSON.
     def match_hotel(self, selected, ref_list):
 
         sel_name = (selected.get("name") or "").strip().lower()
+        def normalize(s):
+            s = s.lower()
+            s = re.sub(r'[^\w\s]', ' ', s)   # replace with SPACE (not remove)
+            s = re.sub(r'\s+', ' ', s)
+            return s.strip()
 
         for h in ref_list:
-            name_ok = (h.get("name") or "").strip().lower() == sel_name
+            name_ok = normalize(h.get("name") or "") == normalize(selected.get("name") or "")
 
             # price_per_night comparison (float-safe)
             p1 = h.get("price_per_night")
@@ -498,6 +503,27 @@ ONLY pure JSON.
             raise Exception("AccommodationAgent: Invalid or missing JSON field 'hotel'")
 
         hotel = data["hotel"]
+
+        def normalize(s):
+            s = s.lower()
+            s = re.sub(r'[^\w\s]', ' ', s)   # replace with SPACE (not remove)
+            s = re.sub(r'\s+', ' ', s)
+            return s.strip()
+
+        selected_name = hotel.get("name")
+
+        matched = False   # 🔥 IMPORTANT
+
+        for h in valid_hotels:
+            if normalize(h["name"]) == normalize(selected_name):
+                hotel = h
+                matched = True
+                break
+
+        # 🚨 ADD THIS
+        if not matched:
+            raise Exception("AccommodationAgent: LLM returned unknown hotel name")
+
 
         # Validate hotel selection EXACTLY
         if not self.match_hotel(hotel, valid_hotels):
@@ -621,6 +647,27 @@ ONLY pure JSON.
             raise Exception("AccommodationAgent (upgrade): Invalid JSON")
 
         hotel = data["hotel"]
+        def normalize(s):
+            s = s.lower()
+            s = re.sub(r'[^\w\s]', ' ', s)
+            s = re.sub(r'\s+', ' ', s)
+            return s.strip()
+
+        selected_name = hotel.get("name")
+
+        if not selected_name:
+            raise Exception("AccommodationAgent (upgrade): Missing hotel name")
+
+        matched = False
+
+        for h in valid_hotels:
+            if normalize(h["name"]) == normalize(selected_name):
+                hotel = h   # 🔥 overwrite with exact object
+                matched = True
+                break
+
+        if not matched:
+            raise Exception("AccommodationAgent (upgrade): LLM returned unknown hotel")
 
         # ----------------------------------------------------------
         # STRICT validation

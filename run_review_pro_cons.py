@@ -6,11 +6,11 @@ import time
 REQUIRED_FREE = 2000      # MiB
 CHECK_INTERVAL = 30       # seconds
 
-# ✅ MULTI-MODEL SUPPORT
-MODEL_NAMES = ["phi4", "mistral","deepseek","llama"]  # add/remove as needed , "qwen2.5"
-DAY_TYPES = [3, 5, 7]
+#  MULTI-MODEL 
+MODEL_NAMES = ["qwen2.5","mistral","llama","deepseek"]  # add, "qwen2.5", "phi4", "mistral","deepseek","llama"
+DAY_TYPES = [3,5,7]
 
-OUTPUT_DIR = "output_agentic_review_experiment"
+OUTPUT_DIR = "output_agentic_review_pro_cons_final"
 BASEPATH = "./TripCraft_database"
 API_KEY = "your_api_key_here"
 
@@ -44,15 +44,15 @@ def run_agentic_planner():
                 "--basepath", BASEPATH,
             ]
 
-            print(f"\n🚀 Starting Agentic Planner (model={model_name}, day_type={day_type})")
+            print(f"\n Starting Agentic Planner (model={model_name}, day_type={day_type})")
             print("PYTHONPATH=. " + " ".join(cmd))
 
             subprocess.run(cmd, env=env, check=True)
 
 
 if __name__ == "__main__":
-    print("⏳ Waiting for GPU to become free...")
-    print(f"➡️ Required free memory: {REQUIRED_FREE} MiB\n")
+    print(" Waiting for GPU to become free...")
+    print(f" Required free memory: {REQUIRED_FREE} MiB\n")
 
     while True:
         total, used = get_gpu_memory()
@@ -66,7 +66,7 @@ if __name__ == "__main__":
         )
 
         if free >= REQUIRED_FREE:
-            print("\n✅ GPU is free enough. Launching jobs...")
+            print("\n GPU is free enough. Launching jobs...")
             run_agentic_planner()
             break
 

@@ -94,6 +94,7 @@ class LLM:
                 },
                 {"role": "user", "content": prompt}
             ]
+            # print("QWEN PROMPT:", prompt)
 
             text = self.tokenizer.apply_chat_template(
                 messages,
@@ -119,6 +120,7 @@ class LLM:
                 )
 
             gen_ids = output_ids[0][inputs.input_ids.shape[-1]:]
+            # print("QWEN RAW OUTPUT:", self.tokenizer.decode(gen_ids, skip_special_tokens=True).strip())
             return self.tokenizer.decode(gen_ids, skip_special_tokens=True).strip()
 
 
@@ -130,6 +132,7 @@ class LLM:
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": prompt}
             ]
+            # print("PHI-4 PROMPT:", prompt)
 
             inputs = self.tokenizer.apply_chat_template(
                 messages,
@@ -154,6 +157,7 @@ class LLM:
                 )
 
             text = self.tokenizer.decode(output_ids[0], skip_special_tokens=True)
+            # print("PHI-4 RAW OUTPUT:", text)
             return text[len(self.tokenizer.decode(input_ids[0], skip_special_tokens=True)):].strip()
 
         # -------------------------------
@@ -206,6 +210,7 @@ class LLM:
                 tokenize=False,
                 add_generation_prompt=True
             )
+            # print("LLAMA PROMPT:", prompt)
 
             inputs = self.tokenizer(text, return_tensors="pt").to(self.model.device)
 
@@ -625,7 +630,7 @@ def init_llm(model_name: str, api_key: str):
     # Load model
     # -------------------------------
     if is_llama or is_yi:
-        print("🚀 Loading model with 4-bit (GPU ONLY)")
+        # print("🚀 Loading model with 4-bit (GPU ONLY)")
 
         from transformers import BitsAndBytesConfig
 
@@ -642,8 +647,15 @@ def init_llm(model_name: str, api_key: str):
             quantization_config=bnb_config,
             device_map={"": 0},   
             dtype=torch.float16,
-            token=os.environ.get("HF_TOKEN")
+            token="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"
         )
+        # model = AutoModelForCausalLM.from_pretrained(
+        #     repo,
+        #     trust_remote_code=True,
+        #     device_map="auto",
+        #     token="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",
+        #     dtype=torch.bfloat16 if torch.cuda.is_available() else torch.float32
+        # )
 
     else:
         model = AutoModelForCausalLM.from_pretrained(

@@ -6,10 +6,10 @@ import time
 REQUIRED_FREE = 31000      # MiB
 CHECK_INTERVAL = 30        # seconds
 
-MODEL_NAME = "mistral" # mistral deepseek llama
+MODEL_NAME = "mistral" # mistral llama deepseek 
 DAY_TYPES = [3,5,7]
 
-OUTPUT_DIR = "output_agentic_experiment" #
+OUTPUT_DIR = "output_agentic_final" #
 BASEPATH = "./TripCraft_database"
 API_KEY = "your_api_key_here"
 

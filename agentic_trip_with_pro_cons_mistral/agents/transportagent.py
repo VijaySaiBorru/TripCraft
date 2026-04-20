@@ -493,6 +493,12 @@ You MUST choose exactly ONE of the following modes:
 
 Choosing any other mode is INVALID.
 
+CRITICAL:
+- The "details" field MUST be copied EXACTLY from transport_ref
+- DO NOT remove or omit any keys (including "from", "to")
+- DO NOT summarize
+- Copy the full object verbatim from transport_ref for the chosen mode on each leg.
+
 ================================================
 OUTPUT FORMAT (STRICT JSON ONLY)
 ================================================

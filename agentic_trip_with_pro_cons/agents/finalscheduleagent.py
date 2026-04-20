@@ -1383,22 +1383,51 @@ class FinalScheduleAgent:
 
         return days
 
-    def _cities_for_prompt(self, cities: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """
-        Return a prompt-safe copy of cities WITHOUT raw_transit_rows.
-        """
+    def _cities_for_prompt(self, cities):
         clean = []
 
         for c in cities:
-            c2 = dict(c)  # shallow copy
+            c2 = {
+                "city": c["city"],
 
-            # ❌ remove heavy / irrelevant fields
-            c2.pop("raw_transit_rows", None)
-            c2.pop("events_ranked", None)
+                # ✅ KEEP restaurants (compressed)
+                "restaurants_ranked": [
+                    {
+                        "name": r.get("name"),
+                        "cuisine": (
+                            r.get("cuisines")[0]
+                            if isinstance(r.get("cuisines"), list) and r.get("cuisines")
+                            else r.get("cuisines")
+                        ),
+                        "avg_cost": r.get("avg_cost"),
+                        "rating": r.get("aggregate_rating"),
+                    }
+                    for r in c.get("restaurants_ranked", [])
+                ],
+
+                # ✅ KEEP attractions (compressed)
+                "attractions_ranked": [
+                    {
+                        "name": a.get("name"),
+                        "category": (
+                            a.get("categories")[0]
+                            if isinstance(a.get("categories"), list) and a.get("categories")
+                            else a.get("categories")
+                        )
+                    }
+                    for a in c.get("attractions_ranked", [])
+                ],
+
+                # ❌ REMOVE heavy junk
+                # raw_transit_rows already removed
+                # descriptions removed
+                # lat/long removed
+            }
 
             clean.append(c2)
 
         return clean
+
 
     # -------------------------
     # Main entry
