@@ -186,13 +186,13 @@ def main():
     day_type_check = int(args.day_type)
 
     if day_type_check == 5:
-        count = 0
+        count = -1
     elif day_type_check == 7:
-        count = 0
+        count = -1
     else:
-        count = 0
+        count = -1
     # count = -1
-    stop =1
+    stop =370
 
 
     for idx in range(start, min(end, n)):
