@@ -3,12 +3,12 @@ import sys
 import os
 import time
 
-REQUIRED_FREE = 2000      # MiB
+REQUIRED_FREE = 40000      # MiB
 CHECK_INTERVAL = 30       # seconds
 
 #  MULTI-MODEL 
-MODEL_NAMES = ["qwen2.5","mistral","llama","deepseek"]  # add, "qwen2.5", "phi4", "mistral","deepseek","llama"
-DAY_TYPES = [3,5,7]
+MODEL_NAMES = ["phi4","mistral","llama","deepseek"]  # add, "qwen2.5", "phi4", "mistral","deepseek","llama"
+DAY_TYPES = [7]
 
 OUTPUT_DIR = "output_agentic_review_pro_cons_final"
 BASEPATH = "./TripCraft_database"

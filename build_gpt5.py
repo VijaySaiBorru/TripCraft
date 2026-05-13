@@ -7,7 +7,7 @@ sys.path.append("/scratch/sg/Vijay/TripCraft")
 
 from agentic_trip.final_schedule_builder_dur import FinalScheduleBuilder
 
-tsv_path = "/scratch/sg/Vijay/TripCraft/output_agentic_final/agentic/gpt5/3day/UHRS_Task_tripcraft_3day_noreview.tsv"
+tsv_path = "/scratch/sg/Vijay/TripCraft/output_agentic_review_pro_cons_final/agentic/gpt5/3day/UHRS_Task_op_selcol_tripcraft_3d_pro_cons_inputs.tsv"
 
 # Load full file
 df = pd.read_csv(tsv_path, sep="\t")
@@ -103,7 +103,14 @@ for idx, row in df.iterrows():
         algorithmic_schedules.append(json.dumps(final_output["days"]))
 
     except Exception as e:
-        print(f"❌ Error at row {idx}: {e}")
+        print("\n================ ERROR =================")
+        print(f"Row: {idx}")
+        print(f"Error: {e}")
+
+        # print("\n--- restaurants_city_1 ---")
+        # print(str(row["restaurants_city_1"]))
+
+        # print("\n=======================================\n")
         algorithmic_schedules.append(None)
 
 # -------------------------------------------------

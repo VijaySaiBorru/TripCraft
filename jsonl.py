@@ -5,7 +5,7 @@ import argparse
 
 # ---------------- CONSTANT BASE PATHS ----------------
 CSV_BASE = "/scratch/sg/Vijay/TripCraft"
-AGENTIC_ROOT = "/scratch/sg/Vijay/TripCraft/output_agentic_experiment/agentic"
+AGENTIC_ROOT = "/scratch/sg/Vijay/TripCraft/output_agentic_review_pro_cons_final/agentic"
 # ----------------------------------------------------
 
 
@@ -33,8 +33,8 @@ def convert(model_name, day_type):
     if not os.path.isdir(agentic_day_dir):
         raise FileNotFoundError(f"Agentic dir not found: {agentic_day_dir}")
 
-    output_tripcraft = f"{model_name}_{day_type}day_final.jsonl"
-    output_llm = f"{model_name}_{day_type}day_llm_final.jsonl"
+    output_tripcraft = f"{model_name}_{day_type}day_with_pc_final.jsonl"
+    output_llm = f"{model_name}_{day_type}day_with_pc_llm_final.jsonl"
 
     levels = load_levels(csv_path)
 

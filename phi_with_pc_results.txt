@@ -1,0 +1,398 @@
+(tripcraftvijay) sg@nikola-tesla-PowerEdge-R7625:/scratch/sg/Vijay/TripCraft/evaluation$ python eval.py --set_type 3d --evaluation_file_path /scratch/sg/Vijay/TripCraft/phi4_3day_with_pc_llm_final.jsonl
+Flights API loaded.
+Accommodations loaded.
+Restaurants loaded.
+OSM_DistanceMatrix loaded.
+Attractions loaded.
+Events loaded.
+Flights API loaded.
+Accommodations loaded.
+Restaurants loaded.
+OSM_DistanceMatrix loaded.
+Attractions loaded.
+Events loaded.
+Delivery Rate: 98.54651162790698%
+Commonsense Constraint Micro Pass Rate: 82.70348837209302%
+Commonsense Constraint Macro Pass Rate: 16.86046511627907%
+Hard Constraint Micro Pass Rate: 88.19188191881919%
+Hard Constraint Macro Pass Rate: 76.45348837209302%
+Final Pass Rate: 12.5%
+------------------
+{'Commonsense Constraint': {'easy': {3: {'Reasonable City Route': {'true': 87, 'false': 0, 'total': 87}, 'Diverse Restaurants': {'true': 87, 'false': 0, 'total': 87}, 'Diverse Attractions': {'true': 81, 'false': 6, 'total': 87}, 'Non-conf. Transportation': {'true': 87, 'false': 0, 'total': 87}, 'No Reapeated Events': {'true': 87, 'false': 0, 'total': 87}, 'Sufficient Time between meals': {'true': 26, 'false': 61, 'total': 87}, 'PoI sequence starts and ends with accommodation': {'true': 17, 'false': 70, 'total': 87}, 'Within Sandbox': {'true': 87, 'false': 0, 'total': 87}, 'Within Current City': {'true': 87, 'false': 0, 'total': 87}, 'Complete Information': {'true': 77, 'false': 10, 'total': 87}}}, 'medium': {3: {'Reasonable City Route': {'true': 123, 'false': 0, 'total': 123}, 'Diverse Restaurants': {'true': 122, 'false': 1, 'total': 123}, 'Diverse Attractions': {'true': 119, 'false': 4, 'total': 123}, 'Non-conf. Transportation': {'true': 123, 'false': 0, 'total': 123}, 'No Reapeated Events': {'true': 123, 'false': 0, 'total': 123}, 'Sufficient Time between meals': {'true': 42, 'false': 81, 'total': 123}, 'PoI sequence starts and ends with accommodation': {'true': 27, 'false': 96, 'total': 123}, 'Within Sandbox': {'true': 119, 'false': 4, 'total': 123}, 'Within Current City': {'true': 122, 'false': 1, 'total': 123}, 'Complete Information': {'true': 107, 'false': 16, 'total': 123}}}, 'hard': {3: {'Reasonable City Route': {'true': 129, 'false': 0, 'total': 129}, 'Diverse Restaurants': {'true': 128, 'false': 1, 'total': 129}, 'Diverse Attractions': {'true': 125, 'false': 4, 'total': 129}, 'Non-conf. Transportation': {'true': 129, 'false': 0, 'total': 129}, 'No Reapeated Events': {'true': 129, 'false': 0, 'total': 129}, 'Sufficient Time between meals': {'true': 44, 'false': 85, 'total': 129}, 'PoI sequence starts and ends with accommodation': {'true': 32, 'false': 97, 'total': 129}, 'Within Sandbox': {'true': 128, 'false': 1, 'total': 129}, 'Within Current City': {'true': 128, 'false': 1, 'total': 129}, 'Complete Information': {'true': 123, 'false': 6, 'total': 129}}}}, 'Hard Constraint': {'easy': {3: {'Budget': {'true': 87, 'false': 0, 'total': 87}}}, 'medium': {3: {'Room Rule': {'true': 12, 'false': 13, 'total': 25}, 'Budget': {'true': 123, 'false': 0, 'total': 123}, 'Cuisine': {'true': 21, 'false': 4, 'total': 25}, 'Room Type': {'true': 48, 'false': 1, 'total': 49}, 'Attraction Type': {'true': 25, 'false': 2, 'total': 27}, 'Event Type': {'true': 4, 'false': 1, 'total': 5}, 'Transportation': {'true': 4, 'false': 0, 'total': 4}}}, 'hard': {3: {'Room Rule': {'true': 53, 'false': 30, 'total': 83}, 'Room Type': {'true': 75, 'false': 0, 'total': 75}, 'Attraction Type': {'true': 46, 'false': 11, 'total': 57}, 'Budget': {'true': 128, 'false': 1, 'total': 129}, 'Cuisine': {'true': 36, 'false': 25, 'total': 61}, 'Transportation': {'true': 44, 'false': 0, 'total': 44}, 'Event Type': {'true': 11, 'false': 2, 'total': 13}}}}}
+------------------
+(tripcraftvijay) sg@nikola-tesla-PowerEdge-R7625:/scratch/sg/Vijay/TripCraft/evaluation$ 
+
+(tripcraftvijay) sg@nikola-tesla-PowerEdge-R7625:/scratch/sg/Vijay/TripCraft/evaluation$ python eval.py --set_type 3d --evaluation_file_path /scratch/sg/Vijay/TripCraft/phi4_3day_with_pc_final.jsonl
+Flights API loaded.
+Accommodations loaded.
+Restaurants loaded.
+OSM_DistanceMatrix loaded.
+Attractions loaded.
+Events loaded.
+Flights API loaded.
+Accommodations loaded.
+Restaurants loaded.
+OSM_DistanceMatrix loaded.
+Attractions loaded.
+Events loaded.
+Delivery Rate: 98.83720930232558%
+Commonsense Constraint Micro Pass Rate: 98.22674418604652%
+Commonsense Constraint Macro Pass Rate: 92.73255813953489%
+Hard Constraint Micro Pass Rate: 86.22386223862239%
+Hard Constraint Macro Pass Rate: 71.51162790697676%
+Final Pass Rate: 67.44186046511628%
+------------------
+{'Commonsense Constraint': {'easy': {3: {'Reasonable City Route': {'true': 87, 'false': 0, 'total': 87}, 'Diverse Restaurants': {'true': 87, 'false': 0, 'total': 87}, 'Diverse Attractions': {'true': 87, 'false': 0, 'total': 87}, 'Non-conf. Transportation': {'true': 87, 'false': 0, 'total': 87}, 'No Reapeated Events': {'true': 87, 'false': 0, 'total': 87}, 'Sufficient Time between meals': {'true': 87, 'false': 0, 'total': 87}, 'PoI sequence starts and ends with accommodation': {'true': 87, 'false': 0, 'total': 87}, 'Within Sandbox': {'true': 87, 'false': 0, 'total': 87}, 'Within Current City': {'true': 87, 'false': 0, 'total': 87}, 'Complete Information': {'true': 81, 'false': 6, 'total': 87}}}, 'medium': {3: {'Reasonable City Route': {'true': 124, 'false': 0, 'total': 124}, 'Diverse Restaurants': {'true': 124, 'false': 0, 'total': 124}, 'Diverse Attractions': {'true': 124, 'false': 0, 'total': 124}, 'Non-conf. Transportation': {'true': 124, 'false': 0, 'total': 124}, 'No Reapeated Events': {'true': 124, 'false': 0, 'total': 124}, 'Sufficient Time between meals': {'true': 124, 'false': 0, 'total': 124}, 'PoI sequence starts and ends with accommodation': {'true': 124, 'false': 0, 'total': 124}, 'Within Sandbox': {'true': 124, 'false': 0, 'total': 124}, 'Within Current City': {'true': 124, 'false': 0, 'total': 124}, 'Complete Information': {'true': 113, 'false': 11, 'total': 124}}}, 'hard': {3: {'Reasonable City Route': {'true': 129, 'false': 0, 'total': 129}, 'Diverse Restaurants': {'true': 129, 'false': 0, 'total': 129}, 'Diverse Attractions': {'true': 129, 'false': 0, 'total': 129}, 'Non-conf. Transportation': {'true': 129, 'false': 0, 'total': 129}, 'No Reapeated Events': {'true': 129, 'false': 0, 'total': 129}, 'Sufficient Time between meals': {'true': 129, 'false': 0, 'total': 129}, 'PoI sequence starts and ends with accommodation': {'true': 129, 'false': 0, 'total': 129}, 'Within Sandbox': {'true': 129, 'false': 0, 'total': 129}, 'Within Current City': {'true': 129, 'false': 0, 'total': 129}, 'Complete Information': {'true': 125, 'false': 4, 'total': 129}}}}, 'Hard Constraint': {'easy': {3: {'Budget': {'true': 87, 'false': 0, 'total': 87}}}, 'medium': {3: {'Room Rule': {'true': 12, 'false': 13, 'total': 25}, 'Budget': {'true': 124, 'false': 0, 'total': 124}, 'Cuisine': {'true': 15, 'false': 10, 'total': 25}, 'Room Type': {'true': 48, 'false': 1, 'total': 49}, 'Attraction Type': {'true': 25, 'false': 3, 'total': 28}, 'Event Type': {'true': 4, 'false': 1, 'total': 5}, 'Transportation': {'true': 4, 'false': 0, 'total': 4}}}, 'hard': {3: {'Room Rule': {'true': 53, 'false': 30, 'total': 83}, 'Room Type': {'true': 75, 'false': 0, 'total': 75}, 'Attraction Type': {'true': 43, 'false': 14, 'total': 57}, 'Budget': {'true': 128, 'false': 1, 'total': 129}, 'Cuisine': {'true': 28, 'false': 33, 'total': 61}, 'Transportation': {'true': 44, 'false': 0, 'total': 44}, 'Event Type': {'true': 11, 'false': 2, 'total': 13}}}}}
+------------------
+(tripcraftvijay) sg@nikola-tesla-PowerEdge-R7625:/scratch/sg/Vijay/TripCraft/evaluation$ 
+
+(tripcraftvijay) sg@nikola-tesla-PowerEdge-R7625:/scratch/sg/Vijay/TripCraft/evaluation$ python eval.py --set_type 5d --evaluation_file_path /scratch/sg/Vijay/TripCraft/gpt5_5day_llm_final2.jsonl
+Flights API loaded.
+Accommodations loaded.
+Restaurants loaded.
+OSM_DistanceMatrix loaded.
+Attractions loaded.
+Events loaded.
+Flights API loaded.
+Accommodations loaded.
+Restaurants loaded.
+OSM_DistanceMatrix loaded.
+Attractions loaded.
+Events loaded.
+Delivery Rate: 100.0%
+Commonsense Constraint Micro Pass Rate: 90.83333333333333%
+Commonsense Constraint Macro Pass Rate: 44.44444444444444%
+Hard Constraint Micro Pass Rate: 87.2340425531915%
+Hard Constraint Macro Pass Rate: 71.60493827160494%
+Final Pass Rate: 33.33333333333333%
+------------------
+{'Commonsense Constraint': {'easy': {5: {'Reasonable City Route': {'true': 44, 'false': 0, 'total': 44}, 'Diverse Restaurants': {'true': 44, 'false': 0, 'total': 44}, 'Diverse Attractions': {'true': 44, 'false': 0, 'total': 44}, 'Non-conf. Transportation': {'true': 44, 'false': 0, 'total': 44}, 'No Reapeated Events': {'true': 44, 'false': 0, 'total': 44}, 'Sufficient Time between meals': {'true': 23, 'false': 21, 'total': 44}, 'PoI sequence starts and ends with accommodation': {'true': 31, 'false': 13, 'total': 44}, 'Within Sandbox': {'true': 39, 'false': 5, 'total': 44}, 'Within Current City': {'true': 44, 'false': 0, 'total': 44}, 'Complete Information': {'true': 44, 'false': 0, 'total': 44}}}, 'medium': {5: {'Reasonable City Route': {'true': 158, 'false': 0, 'total': 158}, 'Diverse Restaurants': {'true': 158, 'false': 0, 'total': 158}, 'Diverse Attractions': {'true': 158, 'false': 0, 'total': 158}, 'Non-conf. Transportation': {'true': 158, 'false': 0, 'total': 158}, 'No Reapeated Events': {'true': 158, 'false': 0, 'total': 158}, 'Sufficient Time between meals': {'true': 106, 'false': 52, 'total': 158}, 'PoI sequence starts and ends with accommodation': {'true': 113, 'false': 45, 'total': 158}, 'Within Sandbox': {'true': 136, 'false': 22, 'total': 158}, 'Within Current City': {'true': 158, 'false': 0, 'total': 158}, 'Complete Information': {'true': 148, 'false': 10, 'total': 158}}}, 'hard': {5: {'Reasonable City Route': {'true': 122, 'false': 0, 'total': 122}, 'Diverse Restaurants': {'true': 122, 'false': 0, 'total': 122}, 'Diverse Attractions': {'true': 122, 'false': 0, 'total': 122}, 'Non-conf. Transportation': {'true': 122, 'false': 0, 'total': 122}, 'No Reapeated Events': {'true': 122, 'false': 0, 'total': 122}, 'Sufficient Time between meals': {'true': 69, 'false': 53, 'total': 122}, 'PoI sequence starts and ends with accommodation': {'true': 67, 'false': 55, 'total': 122}, 'Within Sandbox': {'true': 106, 'false': 16, 'total': 122}, 'Within Current City': {'true': 122, 'false': 0, 'total': 122}, 'Complete Information': {'true': 117, 'false': 5, 'total': 122}}}}, 'Hard Constraint': {'easy': {5: {'Budget': {'true': 43, 'false': 1, 'total': 44}}}, 'medium': {5: {'Cuisine': {'true': 28, 'false': 6, 'total': 34}, 'Budget': {'true': 155, 'false': 3, 'total': 158}, 'Room Rule': {'true': 24, 'false': 14, 'total': 38}, 'Room Type': {'true': 60, 'false': 1, 'total': 61}, 'Attraction Type': {'true': 15, 'false': 7, 'total': 22}, 'Transportation': {'true': 18, 'false': 3, 'total': 21}, 'Event Type': {'true': 4, 'false': 2, 'total': 6}}}, 'hard': {5: {'Cuisine': {'true': 51, 'false': 18, 'total': 69}, 'Transportation': {'true': 37, 'false': 5, 'total': 42}, 'Attraction Type': {'true': 40, 'false': 17, 'total': 57}, 'Budget': {'true': 117, 'false': 5, 'total': 122}, 'Room Type': {'true': 91, 'false': 0, 'total': 91}, 'Room Rule': {'true': 49, 'false': 22, 'total': 71}, 'Event Type': {'true': 6, 'false': 4, 'total': 10}}}}}
+------------------
+(tripcraftvijay) sg@nikola-tesla-PowerEdge-R7625:/scratch/sg/Vijay/TripCraft/evaluation$ 
+
+(tripcraftvijay) sg@nikola-tesla-PowerEdge-R7625:/scratch/sg/Vijay/TripCraft/evaluation$ python eval.py --set_type 5d --evaluation_file_path /scratch/sg/Vijay/TripCr
+aft/gpt5_5day_final.jsonl
+Flights API loaded.
+Accommodations loaded.
+Restaurants loaded.
+OSM_DistanceMatrix loaded.
+Attractions loaded.
+Events loaded.
+Flights API loaded.
+Accommodations loaded.
+Restaurants loaded.
+OSM_DistanceMatrix loaded.
+Attractions loaded.
+Events loaded.
+Delivery Rate: 100.0%
+Commonsense Constraint Micro Pass Rate: 98.61111111111111%
+Commonsense Constraint Macro Pass Rate: 86.11111111111111%
+Hard Constraint Micro Pass Rate: 88.0614657210402%
+Hard Constraint Macro Pass Rate: 73.14814814814815%
+Final Pass Rate: 62.03703703703704%
+------------------
+{'Commonsense Constraint': {'easy': {5: {'Reasonable City Route': {'true': 44, 'false': 0, 'total': 44}, 'Diverse Restaurants': {'true': 44, 'false': 0, 'total': 44}, 'Diverse Attractions': {'true': 44, 'false': 0, 'total': 44}, 'Non-conf. Transportation': {'true': 44, 'false': 0, 'total': 44}, 'No Reapeated Events': {'true': 44, 'false': 0, 'total': 44}, 'Sufficient Time between meals': {'true': 44, 'false': 0, 'total': 44}, 'PoI sequence starts and ends with accommodation': {'true': 44, 'false': 0, 'total': 44}, 'Within Sandbox': {'true': 40, 'false': 4, 'total': 44}, 'Within Current City': {'true': 44, 'false': 0, 'total': 44}, 'Complete Information': {'true': 44, 'false': 0, 'total': 44}}}, 'medium': {5: {'Reasonable City Route': {'true': 158, 'false': 0, 'total': 158}, 'Diverse Restaurants': {'true': 158, 'false': 0, 'total': 158}, 'Diverse Attractions': {'true': 158, 'false': 0, 'total': 158}, 'Non-conf. Transportation': {'true': 158, 'false': 0, 'total': 158}, 'No Reapeated Events': {'true': 158, 'false': 0, 'total': 158}, 'Sufficient Time between meals': {'true': 158, 'false': 0, 'total': 158}, 'PoI sequence starts and ends with accommodation': {'true': 158, 'false': 0, 'total': 158}, 'Within Sandbox': {'true': 134, 'false': 24, 'total': 158}, 'Within Current City': {'true': 158, 'false': 0, 'total': 158}, 'Complete Information': {'true': 158, 'false': 0, 'total': 158}}}, 'hard': {5: {'Reasonable City Route': {'true': 122, 'false': 0, 'total': 122}, 'Diverse Restaurants': {'true': 122, 'false': 0, 'total': 122}, 'Diverse Attractions': {'true': 122, 'false': 0, 'total': 122}, 'Non-conf. Transportation': {'true': 122, 'false': 0, 'total': 122}, 'No Reapeated Events': {'true': 122, 'false': 0, 'total': 122}, 'Sufficient Time between meals': {'true': 122, 'false': 0, 'total': 122}, 'PoI sequence starts and ends with accommodation': {'true': 122, 'false': 0, 'total': 122}, 'Within Sandbox': {'true': 105, 'false': 17, 'total': 122}, 'Within Current City': {'true': 122, 'false': 0, 'total': 122}, 'Complete Information': {'true': 122, 'false': 0, 'total': 122}}}}, 'Hard Constraint': {'easy': {5: {'Budget': {'true': 43, 'false': 1, 'total': 44}}}, 'medium': {5: {'Cuisine': {'true': 28, 'false': 6, 'total': 34}, 'Budget': {'true': 155, 'false': 3, 'total': 158}, 'Room Rule': {'true': 24, 'false': 14, 'total': 38}, 'Room Type': {'true': 60, 'false': 1, 'total': 61}, 'Attraction Type': {'true': 17, 'false': 5, 'total': 22}, 'Transportation': {'true': 18, 'false': 3, 'total': 21}, 'Event Type': {'true': 4, 'false': 2, 'total': 6}}}, 'hard': {5: {'Cuisine': {'true': 53, 'false': 16, 'total': 69}, 'Transportation': {'true': 37, 'false': 5, 'total': 42}, 'Attraction Type': {'true': 41, 'false': 16, 'total': 57}, 'Budget': {'true': 117, 'false': 5, 'total': 122}, 'Room Type': {'true': 91, 'false': 0, 'total': 91}, 'Room Rule': {'true': 49, 'false': 22, 'total': 71}, 'Event Type': {'true': 8, 'false': 2, 'total': 10}}}}}
+------------------
+(tripcraftvijay) sg@nikola-tesla-PowerEdge-R7625:/scratch/sg/Vijay/TripCraft/evaluation$ 
+
+(tripcraftvijay) sg@nikola-tesla-PowerEdge-R7625:/scratch/sg/Vijay/TripCraft/evaluation$ python eval.py --set_type 7d --evaluation_file_path /scratch/sg/Vijay/TripCraft/gpt5_7day_llm_final2.jsonl
+Flights API loaded.
+Accommodations loaded.
+Restaurants loaded.
+OSM_DistanceMatrix loaded.
+Attractions loaded.
+Events loaded.
+Flights API loaded.
+Accommodations loaded.
+Restaurants loaded.
+OSM_DistanceMatrix loaded.
+Attractions loaded.
+Events loaded.
+Delivery Rate: 100.0%
+Commonsense Constraint Micro Pass Rate: 79.96987951807229%
+Commonsense Constraint Macro Pass Rate: 5.421686746987952%
+Hard Constraint Micro Pass Rate: 87.9652605459057%
+Hard Constraint Macro Pass Rate: 77.40963855421687%
+Final Pass Rate: 3.614457831325301%
+------------------
+{'Commonsense Constraint': {'easy': {7: {'Reasonable City Route': {'true': 72, 'false': 0, 'total': 72}, 'Diverse Restaurants': {'true': 68, 'false': 4, 'total': 72}, 'Diverse Attractions': {'true': 72, 'false': 0, 'total': 72}, 'Non-conf. Transportation': {'true': 72, 'false': 0, 'total': 72}, 'No Reapeated Events': {'true': 72, 'false': 0, 'total': 72}, 'Sufficient Time between meals': {'true': 8, 'false': 64, 'total': 72}, 'PoI sequence starts and ends with accommodation': {'true': 3, 'false': 69, 'total': 72}, 'Within Sandbox': {'true': 65, 'false': 7, 'total': 72}, 'Within Current City': {'true': 72, 'false': 0, 'total': 72}, 'Complete Information': {'true': 66, 'false': 6, 'total': 72}}}, 'medium': {7: {'Reasonable City Route': {'true': 154, 'false': 1, 'total': 155}, 'Diverse Restaurants': {'true': 150, 'false': 5, 'total': 155}, 'Diverse Attractions': {'true': 155, 'false': 0, 'total': 155}, 'Non-conf. Transportation': {'true': 155, 'false': 0, 'total': 155}, 'No Reapeated Events': {'true': 155, 'false': 0, 'total': 155}, 'Sufficient Time between meals': {'true': 26, 'false': 129, 'total': 155}, 'PoI sequence starts and ends with accommodation': {'true': 15, 'false': 140, 'total': 155}, 'Within Sandbox': {'true': 129, 'false': 26, 'total': 155}, 'Within Current City': {'true': 155, 'false': 0, 'total': 155}, 'Complete Information': {'true': 148, 'false': 7, 'total': 155}}}, 'hard': {7: {'Reasonable City Route': {'true': 105, 'false': 0, 'total': 105}, 'Diverse Restaurants': {'true': 103, 'false': 2, 'total': 105}, 'Diverse Attractions': {'true': 105, 'false': 0, 'total': 105}, 'Non-conf. Transportation': {'true': 105, 'false': 0, 'total': 105}, 'No Reapeated Events': {'true': 105, 'false': 0, 'total': 105}, 'Sufficient Time between meals': {'true': 18, 'false': 87, 'total': 105}, 'PoI sequence starts and ends with accommodation': {'true': 13, 'false': 92, 'total': 105}, 'Within Sandbox': {'true': 83, 'false': 22, 'total': 105}, 'Within Current City': {'true': 105, 'false': 0, 'total': 105}, 'Complete Information': {'true': 101, 'false': 4, 'total': 105}}}}, 'Hard Constraint': {'easy': {7: {'Budget': {'true': 72, 'false': 0, 'total': 72}}}, 'medium': {7: {'Room Type': {'true': 40, 'false': 0, 'total': 40}, 'Budget': {'true': 155, 'false': 0, 'total': 155}, 'Room Rule': {'true': 13, 'false': 20, 'total': 33}, 'Cuisine': {'true': 34, 'false': 3, 'total': 37}, 'Transportation': {'true': 13, 'false': 0, 'total': 13}, 'Attraction Type': {'true': 38, 'false': 8, 'total': 46}, 'Event Type': {'true': 11, 'false': 0, 'total': 11}}}, 'hard': {7: {'Room Type': {'true': 42, 'false': 3, 'total': 45}, 'Attraction Type': {'true': 35, 'false': 17, 'total': 52}, 'Budget': {'true': 105, 'false': 0, 'total': 105}, 'Room Rule': {'true': 33, 'false': 22, 'total': 55}, 'Cuisine': {'true': 47, 'false': 14, 'total': 61}, 'Transportation': {'true': 48, 'false': 2, 'total': 50}, 'Event Type': {'true': 23, 'false': 8, 'total': 31}}}}}
+------------------
+
+
+
+(tripcraftvijay) sg@nikola-tesla-PowerEdge-R7625:/scratch/sg/Vijay/TripCraft/evaluation$ python evaluate_rgpa.py --gen_file /scratch/sg/Vijay/TripCraft/gpt5_3day_with_pc_llm_final2.jsonl --db_dir /scratch/sg/Vijay/TripCraft/TripCraft_database
+
+[*] Evaluating generated itineraries...
+Processing Plans: 0it [00:00, ?it/s]
+======================================================================
+🔍 DEEP DIVE: CALCULATING FIRST ITINERARY
+======================================================================
+👤 PERSONA:
+   'Traveler Type: Adventure Seeker; Purpose of Travel: Cultural Exploration; Spending Preference: Luxury Traveler; Location Preference: Beaches'
+
+📍 ENTITY: Large Comfortable Space W/ Private Entrance & Bath (Baltimore)
+   [+] PROS: Private entrance and bath. Comfortable bed. Space heater and electric fireplace. Heated blanket. Cle...
+   [-] CONS: Ceiling is low, may hit head for taller individuals. Bed on thin metal frame, may be unstable for he...
+   📊 Sim(Persona, Pros) = 0.4091
+   📊 Sim(Persona, Cons) = 0.2836
+   🧮 Math: 0.4091 - (0.5 * 0.2836)
+   ✅ Entity Score: 0.2672
+
+📍 ENTITY: Toki Underground Baltimore (Baltimore)
+   [+] PROS: Excellent broth and ramen. Top of the line service. Great service and recommendations. Great food an...
+   [-] CONS: Noise from next door music space was terrible...
+   📊 Sim(Persona, Pros) = 0.1866
+   📊 Sim(Persona, Cons) = -0.0638
+   🧮 Math: 0.1866 - (0.5 * 0.0000)
+   ✅ Entity Score: 0.1866
+
+📍 ENTITY: Miss Shirley'S Cafe, Inner Harbor (Baltimore)
+   [+] PROS: Friendly and knowledgeable staff. Delicious and well-presented food. Clean cafe and bathrooms. Gener...
+   [-] CONS: ...
+   📊 Sim(Persona, Pros) = 0.2806
+   📊 Sim(Persona, Cons) = 0.0000
+   🧮 Math: 0.2806 - (0.5 * 0.0000)
+   ✅ Entity Score: 0.2806
+
+📍 ENTITY: Fort Mchenry National Monument And Historic Shrine (Baltimore)
+   [+] PROS: Well-preserved historical site with authentic rooms and artifacts from 1814 to the 20th century. Stu...
+   [-] CONS: Difficult to access by public transportation. Limited visitor numbers during off-peak hours may redu...
+   📊 Sim(Persona, Pros) = 0.2116
+   📊 Sim(Persona, Cons) = 0.2131
+   🧮 Math: 0.2116 - (0.5 * 0.2131)
+   ✅ Entity Score: 0.1051
+
+📍 ENTITY: Large Comfortable Space W/ Private Entrance & Bath (Baltimore)
+   [+] PROS: Private entrance and bath. Comfortable bed. Space heater and electric fireplace. Heated blanket. Cle...
+   [-] CONS: Ceiling is low, may hit head for taller individuals. Bed on thin metal frame, may be unstable for he...
+   📊 Sim(Persona, Pros) = 0.4091
+   📊 Sim(Persona, Cons) = 0.2836
+   🧮 Math: 0.4091 - (0.5 * 0.2836)
+   ✅ Entity Score: 0.2672
+
+📍 ENTITY: Blue Moon Cafe (Baltimore)
+   [+] PROS: Delicious breakfast options. Great food and staff. Prompt and friendly service. Large portions. Orig...
+   [-] CONS: ...
+   📊 Sim(Persona, Pros) = 0.2894
+   📊 Sim(Persona, Cons) = 0.0000
+   🧮 Math: 0.2894 - (0.5 * 0.0000)
+   ✅ Entity Score: 0.2894
+
+📍 ENTITY: The Helmand (Baltimore)
+   [+] PROS: Food is bold, flavorful, and authentic with unique spices and textures. Excellent vegetarian options...
+   [-] CONS: ...
+   📊 Sim(Persona, Pros) = 0.2921
+   📊 Sim(Persona, Cons) = 0.0000
+   🧮 Math: 0.2921 - (0.5 * 0.0000)
+   ✅ Entity Score: 0.2921
+
+📍 ENTITY: The Food Market (Baltimore)
+   [+] PROS: Great food with delicious flavors. Excellent service with attentive and friendly staff. Variety of d...
+   [-] CONS: ...
+   📊 Sim(Persona, Pros) = 0.3022
+   📊 Sim(Persona, Cons) = 0.0000
+   🧮 Math: 0.3022 - (0.5 * 0.0000)
+   ✅ Entity Score: 0.3022
+
+📍 ENTITY: Baltimore Museum Of Art (Baltimore)
+   [+] PROS: Impressive collection of Matisse, Monet, Van Gogh, and Corot. Unique and extensive Cone sisters coll...
+   [-] CONS: Some galleries closed for renovations, not all collection on display. Limited parking on site and ex...
+   📊 Sim(Persona, Pros) = 0.2180
+   📊 Sim(Persona, Cons) = 0.1849
+   🧮 Math: 0.2180 - (0.5 * 0.1849)
+   ✅ Entity Score: 0.1255
+
+📍 ENTITY: The Walters Art Museum (Baltimore)
+   [+] PROS: Free admission. Excellent and varied exhibits from around the world. Stunning collection including a...
+   [-] CONS: No clear path or organized layout between galleries. Challenging to navigate due to lack of thematic...
+   📊 Sim(Persona, Pros) = 0.2095
+   📊 Sim(Persona, Cons) = 0.2306
+   🧮 Math: 0.2095 - (0.5 * 0.2306)
+   ✅ Entity Score: 0.0943
+
+📍 ENTITY: American Visionary Art Museum (Baltimore)
+   [+] PROS: Variety and creativity of artwork span whimsical to serious themes. Excellent selection of vintage a...
+   [-] CONS: ...
+   📊 Sim(Persona, Pros) = 0.2301
+   📊 Sim(Persona, Cons) = 0.0000
+   🧮 Math: 0.2301 - (0.5 * 0.0000)
+   ✅ Entity Score: 0.2301
+
+📍 ENTITY: Angies Seafood (Baltimore)
+   [+] PROS: Excellent seafood options like stuffed mushrooms, honey glazed salmon, lobster with seafood stuffing...
+   [-] CONS: Snapper was dry with very little lemon sauce. Broccoli lacked crunch and tasted like mashed potatoes...
+   📊 Sim(Persona, Pros) = 0.3171
+   📊 Sim(Persona, Cons) = 0.2692
+   🧮 Math: 0.3171 - (0.5 * 0.2692)
+   ✅ Entity Score: 0.1826
+
+📍 ENTITY: La Tavola (Baltimore)
+   [+] PROS: Food was excellent and authentic Italian cuisine. Pasta is made by hand, light, flavorful and delici...
+   [-] CONS: Service was slow and sometimes unresponsive. Appetizer was forgotten and bread basket never arrived....
+   📊 Sim(Persona, Pros) = 0.2322
+   📊 Sim(Persona, Cons) = 0.3325
+   🧮 Math: 0.2322 - (0.5 * 0.3325)
+   ✅ Entity Score: 0.0659
+
+📍 ENTITY: B&O Railroad Museum (Baltimore)
+   [+] PROS: Great variety of things to see. Beautiful inside with historical information. Impressive and well-ma...
+   [-] CONS: Outdoor amenities were out of order or closed. Bathrooms not clearly marked, causing uncomfortable s...
+   📊 Sim(Persona, Pros) = 0.2915
+   📊 Sim(Persona, Cons) = 0.3498
+   🧮 Math: 0.2915 - (0.5 * 0.3498)
+   ✅ Entity Score: 0.1166
+
+======================================================================
+🏆 FINAL ITINERARY AVERAGE SCORE: 0.2004
+======================================================================
+
+Processing Plans: 344it [01:27,  3.91it/s]
+
+========== EXPERIENTIAL EVALUATION SUMMARY ==========
+Samples Evaluated : 344
+Avg RGPA Score    : 0.2162 (Lambda = 0.5)
+=====================================================
+
+(tripcraftvijay) sg@nikola-tesla-PowerEdge-R7625:/scratch/sg/Vijay/TripCraft/evaluation$ 
+
+(tripcraftvijay) sg@nikola-tesla-PowerEdge-R7625:/scratch/sg/Vijay/TripCraft/evaluation$ python evaluate_rgpa.py --gen_file /scratch/sg/Vijay/TripCraft/gpt5_3day_with_pc_llm_final2.jsonl --db_dir /scratch/sg/Vijay/TripCraft/TripCraft_database
+[*] Loading Zero-Shot NLI Classifier (this may take a moment)...
+config.json: 1.15kB [00:00, 593kB/s]
+model.safetensors: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████| 1.63G/1.63G [00:13<00:00, 124MB/s]
+tokenizer_config.json: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████| 26.0/26.0 [00:00<00:00, 73.3kB/s]
+vocab.json: 899kB [00:00, 9.04MB/s]
+merges.txt: 456kB [00:00, 9.03MB/s]
+tokenizer.json: 1.36MB [00:00, 10.7MB/s]
+Device set to use cuda:0
+
+[*] Evaluating generated itineraries...
+Processing Plans: 0it [00:00, ?it/s]
+======================================================================
+🔍 DEEP DIVE: CALCULATING FIRST ITINERARY (NLI MODE)
+======================================================================
+👤 PERSONA:
+   'Traveler Type: Adventure Seeker; Purpose of Travel: Cultural Exploration; Spending Preference: Luxury Traveler; Location Preference: Beaches'
+
+📍 ENTITY: Large Comfortable Space W/ Private Entrance & Bath (Baltimore)
+   [+] PROS: Private entrance and bath. Comfortable bed. Space heater and electric fireplace. Heated blanket. Cle...
+   [-] CONS: Ceiling is low, may hit head for taller individuals. Bed on thin metal frame, may be unstable for he...
+   📊 Entailment(Pros -> Good for Persona) = 0.6912
+   📊 Entailment(Cons -> Bad for Persona)  = 0.0075
+   🧮 Math: 0.6912 - (0.5 * 0.0075)
+   ✅ Entity Score: 0.6874
+
+📍 ENTITY: Toki Underground Baltimore (Baltimore)
+   [+] PROS: Excellent broth and ramen. Top of the line service. Great service and recommendations. Great food an...
+   [-] CONS: Noise from next door music space was terrible...
+   📊 Entailment(Pros -> Good for Persona) = 0.6977
+   📊 Entailment(Cons -> Bad for Persona)  = 0.0818
+   🧮 Math: 0.6977 - (0.5 * 0.0818)
+   ✅ Entity Score: 0.6568
+
+📍 ENTITY: Miss Shirley'S Cafe, Inner Harbor (Baltimore)
+   [+] PROS: Friendly and knowledgeable staff. Delicious and well-presented food. Clean cafe and bathrooms. Gener...
+   [-] CONS: ...
+   📊 Entailment(Pros -> Good for Persona) = 0.6095
+   📊 Entailment(Cons -> Bad for Persona)  = 0.0000
+   🧮 Math: 0.6095 - (0.5 * 0.0000)
+   ✅ Entity Score: 0.6095
+
+📍 ENTITY: Fort Mchenry National Monument And Historic Shrine (Baltimore)
+   [+] PROS: Well-preserved historical site with authentic rooms and artifacts from 1814 to the 20th century. Stu...
+   [-] CONS: Difficult to access by public transportation. Limited visitor numbers during off-peak hours may redu...
+   📊 Entailment(Pros -> Good for Persona) = 0.3036
+   📊 Entailment(Cons -> Bad for Persona)  = 0.0010
+   🧮 Math: 0.3036 - (0.5 * 0.0010)
+   ✅ Entity Score: 0.3031
+
+📍 ENTITY: Large Comfortable Space W/ Private Entrance & Bath (Baltimore)
+   [+] PROS: Private entrance and bath. Comfortable bed. Space heater and electric fireplace. Heated blanket. Cle...
+   [-] CONS: Ceiling is low, may hit head for taller individuals. Bed on thin metal frame, may be unstable for he...
+   📊 Entailment(Pros -> Good for Persona) = 0.6912
+   📊 Entailment(Cons -> Bad for Persona)  = 0.0075
+   🧮 Math: 0.6912 - (0.5 * 0.0075)
+   ✅ Entity Score: 0.6874
+
+📍 ENTITY: Blue Moon Cafe (Baltimore)
+   [+] PROS: Delicious breakfast options. Great food and staff. Prompt and friendly service. Large portions. Orig...
+   [-] CONS: ...
+   📊 Entailment(Pros -> Good for Persona) = 0.5359
+   📊 Entailment(Cons -> Bad for Persona)  = 0.0000
+   🧮 Math: 0.5359 - (0.5 * 0.0000)
+   ✅ Entity Score: 0.5359
+
+You seem to be using the pipelines sequentially on GPU. In order to maximize efficiency please use a dataset
+📍 ENTITY: The Helmand (Baltimore)
+   [+] PROS: Food is bold, flavorful, and authentic with unique spices and textures. Excellent vegetarian options...
+   [-] CONS: ...
+   📊 Entailment(Pros -> Good for Persona) = 0.7705
+   📊 Entailment(Cons -> Bad for Persona)  = 0.0000
+   🧮 Math: 0.7705 - (0.5 * 0.0000)
+   ✅ Entity Score: 0.7705
+
+📍 ENTITY: The Food Market (Baltimore)
+   [+] PROS: Great food with delicious flavors. Excellent service with attentive and friendly staff. Variety of d...
+   [-] CONS: ...
+   📊 Entailment(Pros -> Good for Persona) = 0.6726
+   📊 Entailment(Cons -> Bad for Persona)  = 0.0000
+   🧮 Math: 0.6726 - (0.5 * 0.0000)
+   ✅ Entity Score: 0.6726
+
+📍 ENTITY: Baltimore Museum Of Art (Baltimore)
+   [+] PROS: Impressive collection of Matisse, Monet, Van Gogh, and Corot. Unique and extensive Cone sisters coll...
+   [-] CONS: Some galleries closed for renovations, not all collection on display. Limited parking on site and ex...
+   📊 Entailment(Pros -> Good for Persona) = 0.7219
+   📊 Entailment(Cons -> Bad for Persona)  = 0.0375
+   🧮 Math: 0.7219 - (0.5 * 0.0375)
+   ✅ Entity Score: 0.7031
+
+📍 ENTITY: The Walters Art Museum (Baltimore)
+   [+] PROS: Free admission. Excellent and varied exhibits from around the world. Stunning collection including a...
+   [-] CONS: No clear path or organized layout between galleries. Challenging to navigate due to lack of thematic...
+   📊 Entailment(Pros -> Good for Persona) = 0.5194
+   📊 Entailment(Cons -> Bad for Persona)  = 0.0137
+   🧮 Math: 0.5194 - (0.5 * 0.0137)
+   ✅ Entity Score: 0.5125
+
+📍 ENTITY: American Visionary Art Museum (Baltimore)
+   [+] PROS: Variety and creativity of artwork span whimsical to serious themes. Excellent selection of vintage a...
+   [-] CONS: ...
+   📊 Entailment(Pros -> Good for Persona) = 0.6539
+   📊 Entailment(Cons -> Bad for Persona)  = 0.0000
+   🧮 Math: 0.6539 - (0.5 * 0.0000)
+   ✅ Entity Score: 0.6539
+
+📍 ENTITY: Angies Seafood (Baltimore)
+   [+] PROS: Excellent seafood options like stuffed mushrooms, honey glazed salmon, lobster with seafood stuffing...
+   [-] CONS: Snapper was dry with very little lemon sauce. Broccoli lacked crunch and tasted like mashed potatoes...
+   📊 Entailment(Pros -> Good for Persona) = 0.8281
+   📊 Entailment(Cons -> Bad for Persona)  = 0.0973
+   🧮 Math: 0.8281 - (0.5 * 0.0973)
+   ✅ Entity Score: 0.7795
+
+📍 ENTITY: La Tavola (Baltimore)
+   [+] PROS: Food was excellent and authentic Italian cuisine. Pasta is made by hand, light, flavorful and delici...
+   [-] CONS: Service was slow and sometimes unresponsive. Appetizer was forgotten and bread basket never arrived....
+   📊 Entailment(Pros -> Good for Persona) = 0.3068
+   📊 Entailment(Cons -> Bad for Persona)  = 0.2484
+   🧮 Math: 0.3068 - (0.5 * 0.2484)
+   ✅ Entity Score: 0.1826
+
+📍 ENTITY: B&O Railroad Museum (Baltimore)
+   [+] PROS: Great variety of things to see. Beautiful inside with historical information. Impressive and well-ma...
+   [-] CONS: Outdoor amenities were out of order or closed. Bathrooms not clearly marked, causing uncomfortable s...
+   📊 Entailment(Pros -> Good for Persona) = 0.7600
+   📊 Entailment(Cons -> Bad for Persona)  = 0.1177
+   🧮 Math: 0.7600 - (0.5 * 0.1177)
+   ✅ Entity Score: 0.7011
+
+======================================================================
+ 🏆 FINAL ITINERARY AVERAGE SCORE: 0.6040
+======================================================================
+
+Processing Plans: 344it [09:30,  1.66s/it]
+
+========== EXPERIENTIAL EVALUATION SUMMARY ==========
+Samples Evaluated : 344
+Avg RGPA Score    : 0.4607 (Lambda = 0.5)
+=====================================================

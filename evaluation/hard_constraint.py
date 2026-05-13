@@ -422,6 +422,9 @@ def is_valid_event_type(question, tested_data):
     A required event type is satisfied if at least one event
     in the plan matches that segment type.
     """
+    import pandas as pd
+    import re
+
     required = question['local_constraint'].get('event')
     if required is None:
         return None, None
@@ -442,6 +445,10 @@ def is_valid_event_type(question, tested_data):
             continue
 
         for event in unit['event'].split(';'):
+            event = event.strip()
+            if not event:
+                continue
+
             name = event.rsplit(',', 1)[0].strip()
             city = event.rsplit(',', 1)[-1].strip()
             dates = question['dates']
@@ -450,11 +457,18 @@ def is_valid_event_type(question, tested_data):
                 event_cache[city] = events.run(city, dates)
 
             event_data = event_cache[city]
-            if event_data is None or len(event_data) == 0:
+
+            if event_data is None:
+                continue
+
+            if not isinstance(event_data, pd.DataFrame):
+                continue
+
+            if event_data.empty or 'name' not in event_data.columns:
                 continue
 
             matches = event_data[
-                event_data['name'].astype(str).str.contains(re.escape(name), case=False)
+                event_data['name'].astype(str).str.contains(re.escape(name), case=False, na=False)
             ]
 
             for _, row in matches.iterrows():

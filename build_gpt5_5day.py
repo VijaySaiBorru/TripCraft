@@ -10,7 +10,7 @@ from agentic_trip.final_schedule_builder_dur import FinalScheduleBuilder
 # -------------------------------------------------
 # CONFIG
 # -------------------------------------------------
-tsv_path = "/scratch/sg/Vijay/TripCraft/output_agentic_final/agentic/gpt5/7day/UHRS_Task_v7_tripcraft_7d_noreview_inputs.tsv"
+tsv_path = "/scratch/sg/Vijay/TripCraft/output_agentic_review_pro_cons_final/agentic/gpt5/5day/UHRS_Task_selcol_tripcraft_5day_pro_cons_inputs.tsv"
 
 df = pd.read_csv(tsv_path, sep="\t")
 
@@ -142,3 +142,4 @@ if not DEBUG_FIRST:
     df.to_csv(tsv_path, sep="\t", index=False)
 
     print("✅ Done. 7-day 3-city schedules generated.")
+    

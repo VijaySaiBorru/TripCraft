@@ -1,7 +1,7 @@
 import pandas as pd
 import json
 
-tsv_path = "/scratch/sg/Vijay/TripCraft/output_agentic_final/agentic/gpt5/7day/UHRS_Task_v7_tripcraft_7d_noreview_inputs.tsv"
+tsv_path = "/scratch/sg/Vijay/TripCraft/output_agentic_review_pro_cons_final/agentic/gpt5/5day/UHRS_Task_selcol_tripcraft_5day_pro_cons_inputs.tsv"
 
 df = pd.read_csv(tsv_path, sep="\t")
 
@@ -21,9 +21,9 @@ for idx, row in df.iterrows():
                 return base in poi_text
 
             # ---------------- FIX MEALS ----------------
-            for meal in ["breakfast", "lunch", "dinner"]:
-                if not exists_in_poi(day.get(meal)):
-                    day[meal] = "-"
+            # for meal in ["breakfast", "lunch", "dinner"]:
+            #     if not exists_in_poi(day.get(meal)):
+            #         day[meal] = "-"
 
             # ---------------- FIX ATTRACTIONS ----------------
             attr = day.get("attraction", "")

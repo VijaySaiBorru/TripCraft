@@ -188,7 +188,7 @@ def main():
     if day_type_check == 5:
         count = -1
     elif day_type_check == 7:
-        count = -1
+        count = 44
     else:
         count = -1
     # count = -1

@@ -6,7 +6,7 @@ import csv
 # -------------------------------------------------
 # CONFIG
 # -------------------------------------------------
-tsv_path = "/scratch/sg/Vijay/TripCraft/output_agentic_final/agentic/gpt5/5day/UHRS_Task_v13_vijaysai_selcol_tripcraft_5d_noreview.tsv"
+tsv_path = "/scratch/sg/Vijay/TripCraft/output_agentic_review_pro_cons_final/agentic/gpt5/5day/UHRS_Task_selcol_tripcraft_5day_pro_cons_inputs.tsv"
 
 CSV_PATH = "/scratch/sg/Vijay/TripCraft/TripCraft_database/public_transit_gtfs/all_poi_nearest_stops.csv"
 

@@ -305,7 +305,7 @@ def explain(idx, file_path="/scratch/sg/Vijay/TripCraft/tripcraft_golden_5day.js
 #         print("\n" + "=" * 60)
 #         explain(idx, file_path)
 
-def explain_batch(start_idx, end_idx, file_path="/scratch/sg/Vijay/TripCraft/gpt5_7day_llm_final.jsonl"):
+def explain_batch(start_idx, end_idx, file_path="/scratch/sg/Vijay/TripCraft/gpt5_3day_with_pc_llm_final.jsonl"):
     plans = load_line_json_data(file_path)
     plan_map = {p.get("idx"): p for p in plans}
 

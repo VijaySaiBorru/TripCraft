@@ -19,6 +19,13 @@ attractions_data = pd.read_csv(
     os.path.join(DB_DIR, "attraction", "cleaned_attractions_final.csv")
 )
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print("Using device:", device)
+print("CUDA available:", torch.cuda.is_available())
+if torch.cuda.is_available():
+    print("GPU:", torch.cuda.get_device_name(0))
+embedding_cache = {}
+
 
 def get_mu_d_type(attraction, city, attractions_data):
     """
@@ -46,12 +53,27 @@ def get_mu_d_type(attraction, city, attractions_data):
         raise ValueError(f"No matching entry found for attraction '{attraction}' in city '{city}'.")
 
 def get_bert_embedding(text, tokenizer, model):
-    """Encodes text into a BERT embedding."""
-    inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True, max_length=512)
+    key = text.strip().lower()
+
+    if key in embedding_cache:
+        return embedding_cache[key]
+
+    inputs = tokenizer(
+        key,
+        return_tensors="pt",
+        truncation=True,
+        padding=True,
+        max_length=512
+    )
+
+    inputs = {k: v.to(device) for k, v in inputs.items()}
+
     with torch.no_grad():
         outputs = model(**inputs)
-    return outputs.last_hidden_state.mean(dim=1).squeeze(0).numpy()
 
+    emb = outputs.last_hidden_state.mean(dim=1).squeeze(0).cpu().numpy()
+    embedding_cache[key] = emb
+    return emb
 
 def compute_persona_score(travel_plan, bert_model, bert_tokenizer):
     """Compute the persona score for the travel plan."""
@@ -114,12 +136,17 @@ def compute_persona_score(travel_plan, bert_model, bert_tokenizer):
 
     return avg_persona_score
 
+# 🔥 LOAD ONCE (GLOBAL)
+tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
+model = BertModel.from_pretrained("bert-base-uncased").to(device)
+model.eval()
+
+
 def calculate_persona_score(travel_plan):
     persona = travel_plan.get("JSON", {}).get("persona", "")
     if not persona:
         return -1
-    tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
-    model = BertModel.from_pretrained("bert-base-uncased")
+
     return compute_persona_score(travel_plan, model, tokenizer)
 
 

@@ -10,137 +10,6 @@ import math
 from collections import OrderedDict
 from datetime import datetime
 from ftfy import fix_text
-from itertools import product
-
-location_types = [
-"beach locations",
-"city locations",
-"forest and wildlife locations",
-"mountain locations"
-]
-
-travel_purposes = [
-"adventure travel",
-"cultural exploration",
-"nature exploration",
-"relaxation travel"
-]
-
-spending_types = [
-"economical stays",
-"luxury stays"
-]
-
-traveler_types = [
-"adventure traveler",
-"laidback traveler"
-]
-
-
-def build_persona_index():
-
-    personas = []
-
-    for loc, purpose, spend, traveler in product(
-        location_types,
-        travel_purposes,
-        spending_types,
-        traveler_types
-    ):
-        personas.append((traveler, purpose, spend, loc))
-
-    return personas
-
-
-def persona_json_to_text(persona):
-
-    if isinstance(persona, dict):
-
-        vals = []
-
-        for v in persona.values():
-
-            if isinstance(v, list):
-                vals.extend([str(x) for x in v])
-
-            else:
-                vals.append(str(v))
-
-        return " ".join(vals).lower()
-
-    return str(persona).lower()
-
-
-def parse_json_persona(persona):
-
-    p = persona_json_to_text(persona)
-
-    # traveler
-    if "laidback" in p:
-        traveler = "laidback traveler"
-    else:
-        traveler = "adventure traveler"
-
-    # purpose
-    if "cultural" in p:
-        purpose = "cultural exploration"
-
-    elif "nature" in p:
-        purpose = "nature exploration"
-
-    elif "relax" in p:
-        purpose = "relaxation travel"
-
-    elif "adventure" in p:
-        purpose = "adventure travel"
-
-    else:
-        purpose = "adventure travel"
-
-    # spending
-    if "luxury" in p:
-        spend = "luxury stays"
-
-    elif "economical" in p or "budget" in p:
-        spend = "economical stays"
-
-    else:
-        spend = "economical stays"
-
-    # location
-    if "beach" in p:
-        location = "beach locations"
-
-    elif "mountain" in p:
-        location = "mountain locations"
-
-    elif "forest" in p or "wildlife" in p:
-        location = "forest and wildlife locations"
-
-    elif "city" in p:
-        location = "city locations"
-
-    else:
-        location = "city locations"
-
-    return traveler, purpose, spend, location
-
-
-def get_persona_index(persona):
-
-    traveler, purpose, spend, location = parse_json_persona(persona)
-
-    personas = build_persona_index()
-
-    target = (traveler, purpose, spend, location)
-
-    for i, p in enumerate(personas):
-
-        if p == target:
-            return i + 1
-
-    return 1
-
 
 # --------------------------------------------------
 # Reference collection
@@ -961,8 +830,8 @@ def main():
             city = cities[i]
             new_row[f"city_{i+1}"] = city
             persona = json.loads(new_row["persona_json"])
-            traveler, purpose, spend, location = parse_json_persona(persona)
-            persona_idx = get_persona_index(persona)
+            # traveler, purpose, spend, location = parse_json_persona(persona)
+            # persona_idx = get_persona_index(persona)
 
             # print("\n================ PERSONA DEBUG ================")
             # print("Persona JSON:", persona)

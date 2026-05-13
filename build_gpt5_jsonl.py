@@ -4,9 +4,9 @@ import json
 # -------------------------------------------------
 # Paths
 # -------------------------------------------------
-tsv_path = "/scratch/sg/Vijay/TripCraft/output_agentic_final/agentic/gpt5/7day/UHRS_Task_v7_tripcraft_7d_noreview_inputs.tsv"
-jsonl_input_path = "/scratch/sg/Vijay/TripCraft/tripcraft_golden_7day.jsonl"
-jsonl_output_path = "/scratch/sg/Vijay/TripCraft/gpt5_7day_llm_final2.jsonl"
+tsv_path = "/scratch/sg/Vijay/TripCraft/output_agentic_review_pro_cons_final/agentic/gpt5/5day/UHRS_Task_selcol_tripcraft_5day_pro_cons_inputs.tsv"
+jsonl_input_path = "/scratch/sg/Vijay/TripCraft/tripcraft_golden_5day.jsonl"
+jsonl_output_path = "/scratch/sg/Vijay/TripCraft/gpt5_5day_with_pc_final.jsonl"
 
 # -------------------------------------------------
 # 1️⃣ Load TSV
@@ -19,8 +19,8 @@ idx_to_schedule = {}
 for i, row in df.iterrows():
     one_based_idx = i + 1  # JSONL is 1-based
 
-    if pd.notna(row["final_schedule_cleaned"]):
-        idx_to_schedule[one_based_idx] = json.loads(row["final_schedule_cleaned"])
+    if pd.notna(row["algorithmic_final_schedule"]):
+        idx_to_schedule[one_based_idx] = json.loads(row["algorithmic_final_schedule"])
     else:
         idx_to_schedule[one_based_idx] = None
 
